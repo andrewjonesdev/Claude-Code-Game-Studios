@@ -22,7 +22,7 @@ teammates; the second column is the tool they run on.
 | **Clahadore** | Claude (this session) | Implementer; council seat (advisory-only when Claude wrote the work) | — |
 | **Cedric** | Codex / ChatGPT (`gpt-5.6-sol`, reasoning high) | Chair (synthesis) + seat | `codex exec` |
 | **Regular Jenny** | Gemini 4 Argon High (`gemini-4-argon-high`) | Correctness / design / regression | `agy` |
-| **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), adversarial-security prompt, "do not use any tool" | Security seat — **not** Gemini 3.5 Flash Cyber | `agy` |
+| **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), adversarial-security prompt, "do not use any tool" | Security seat — not Gemini 3.5 Flash Cyber | `agy` |
 | **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
 | **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
 | **Susie Franny** | Meta Muse Spark | Seat (probation) | `muse exec` |
