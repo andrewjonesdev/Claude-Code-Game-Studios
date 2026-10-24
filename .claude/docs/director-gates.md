@@ -126,6 +126,8 @@ calls before waiting for any result; collect all verdicts before proceeding.
 
 ### Council seats (after the mode check, beside the director)
 
+Every council sitting includes the Susie Franny Red Team seat when the preflight reports `muse` present.
+
 Every director is the same model family. At the gates listed in
 `.claude/docs/council.md` → "Where the council sits" (TD-ARCHITECTURE, TD-ADR,
 the four PHASE-GATEs, LP-CODE-REVIEW, QL-TEST-COVERAGE, plus security and

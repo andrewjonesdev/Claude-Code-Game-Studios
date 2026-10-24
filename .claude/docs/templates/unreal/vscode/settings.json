@@ -19,8 +19,7 @@
     "**/Binaries": true,
     "**/Intermediate": true,
     "**/DerivedDataCache": true,
-    "**/Saved": true,
-    "**/Content": true
+    "**/Saved": true
   },
   // Never let the IDE touch binary assets.
   "files.readonlyInclude": { "**/*.uasset": true, "**/*.umap": true }

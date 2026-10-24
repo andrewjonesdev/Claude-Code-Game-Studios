@@ -3,15 +3,6 @@
     "unreal": {
       "type": "http",
       "url": "http://localhost:8000/mcp"
-    },
-    "unreal-blueprints": {
-      "type": "stdio",
-      "command": "python",
-      "args": [
-        "${APPDATA}/Claude/Claude Extensions/local.mcpb.roly-blueprintslab.unreal-engine-pro-tools/mcp_main_server.py",
-        "--server-name",
-        "unreal-handshake"
-      ]
     }
   }
 }

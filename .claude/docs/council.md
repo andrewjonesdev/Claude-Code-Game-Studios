@@ -25,11 +25,12 @@ teammates; the second column is the tool they run on.
 | **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), adversarial-security prompt, "do not use any tool" | Security seat — not Gemini 3.5 Flash Cyber | `agy` |
 | **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
 | **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
-| **Susie Franny** | Meta Muse Spark | Seat (probation) | `muse exec` |
+| **Susie Franny** | Meta Muse Spark | **Red Team** (standing, Andrew 2026-10-24) — abuse cases, trust boundaries, exploitability, prompt-injection paths | `muse exec` read-only (`--disable-write --disable-shell --disable-web-tools`), material inlined in the prompt |
 
 Families, for quorum: Claude, OpenAI, Google, xAI, Meta. **Two seats from one
 family count as one vote** — both Jenny roles are one Google vote, both
-Gronktayvius roles one xAI vote.
+Gronktayvius roles one xAI vote. Susie Franny is the Meta family and carries
+her own vote, independent of Gronktayvius Red Team (xAI).
 
 If the user's machine has the fleet skills `/council-code-review` and
 `/llm-council` installed (`~/.claude/skills/`), **use them** — they carry the
@@ -58,7 +59,7 @@ YAML key `council.tier`, resolver label `council_tier`.
 
 Built first; the target structure.
 
-- Seats: Cedric, Regular Jenny, Gronktayvius General, Susie Franny, Clahadore
+- Seats: Cedric, Regular Jenny, Gronktayvius General, Susie Franny (Red Team), Clahadore
   (advisory when Claude authored). Security-sensitive work adds Cyber Jenny and
   Gronktayvius Red Team.
 - Chair: Cedric. When Codex authored the work, Clahadore chairs. The author
@@ -75,7 +76,7 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
 1. Run `bash .claude/scripts/council-preflight.sh`. It reports which CLIs are
    installed and which fleet skills exist. It does not decide anything.
 2. Seat every family that is present, in this order: Cedric, Regular Jenny, Susie
-   Franny, Gronktayvius General. On security-sensitive or release work also seat Cyber Jenny and Gronktayvius Red Team (same families as Regular Jenny / Gronktayvius General: they add coverage, not votes).
+   Franny (Red Team), Gronktayvius General. On security-sensitive or release work also seat Cyber Jenny and Gronktayvius Red Team (same families as Regular Jenny / Gronktayvius General: they add coverage, not votes).
    A seat the usage governor denies counts as absent.
 3. Chair: Cedric if seated and not the author; otherwise the strongest seated
    non-author; if no non-author seat exists,
@@ -125,8 +126,8 @@ director gate's mode check.
 | `/create-architecture` sign-off | TD-ARCHITECTURE | `/llm-council` on the architecture doc |
 | `/architecture-decision` before Accepted | TD-ADR | `/llm-council` on the ADR |
 | `/gate-check` phase transitions | CD/TD/PR/AD-PHASE-GATE | `/llm-council` on the gate packet |
-| `/security-audit`, any security-sensitive change | — | Security seats (Cyber Jenny + Gronktayvius Red Team + Regular Jenny, Cedric adjudicates). Cyber Jenny + Regular Jenny count as one Google vote, so security quorum needs Google plus at least one other non-author family (OpenAI via Cedric, or xAI via Gronktayvius Red Team) |
-| `/release-checklist` | — | Full available panel **and** both security seats |
+| `/security-audit`, any security-sensitive change | — | Security seats: Regular Jenny, Cyber Jenny, Gronktayvius Red Team, Susie Franny (Red Team); Cedric adjudicates. Security quorum: at least two non-author families among the security seats; Google (either Jenny) counts once, xAI once, Meta once. Susie Franny's Red Team seat never substitutes for, or is relabelled as, Gronktayvius Red Team |
+| `/release-checklist` | — | Full available panel **and** all security seats including Susie Franny (Red Team) |
 
 TD-ARCHITECTURE and `/security-audit` sittings require the data-flow diagram + STRIDE table from `security-baseline.md`. [threat-modeling deck ch.1, 9, 10, 12]
 

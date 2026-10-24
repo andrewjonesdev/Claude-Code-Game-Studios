@@ -275,7 +275,7 @@ For each finding, assign:
 Resolve `council_tier` with `bash "${CLAUDE_SKILL_DIR}/../../hooks/yaml-helper.sh" resolve_config --keys council_tier` (unset = `available`, `off` = skip).
 Run `bash "${CLAUDE_SKILL_DIR}/../../scripts/council-preflight.sh"`; convene per `.claude/docs/council.md`.
 Prefer the `/council-code-review` fleet skill for diffs.
-Seat per `council.md` for the resolved tier, always including Cyber Jenny + Gronktayvius Red Team + Regular Jenny; Cedric adjudicates unless Codex authored the change. A missing security seat fails closed unless a logged waiver exists.
+Seat per `council.md` for the resolved tier, always including Cyber Jenny + Gronktayvius Red Team + Regular Jenny + Susie Franny (Red Team); Cedric adjudicates unless Codex authored the change. A missing security seat fails closed unless a logged waiver exists.
 Combine verdicts most-severe-wins.
 
 ```markdown

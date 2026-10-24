@@ -5,21 +5,24 @@
   "tasks": [
     {
       "label": "UE: Build editor (Development)",
-      "type": "shell",
-      "command": "& '<UE_ROOT>/Engine/Build/BatchFiles/Build.bat' <Project>Editor Win64 Development -Project='${workspaceFolder}/<Project>.uproject' -WaitMutex",
+      "type": "process",
+      "command": "<UE_ROOT>/Engine/Build/BatchFiles/Build.bat",
+      "args": ["<Project>Editor", "Win64", "Development", "-Project=${workspaceFolder}/<Project>.uproject", "-WaitMutex"],
       "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "UE: Generate clang database",
-      "type": "shell",
-      "command": "& '<UE_ROOT>/Engine/Build/BatchFiles/RunUBT.bat' -mode=GenerateClangDatabase -project='${workspaceFolder}/<Project>.uproject' <Project>Editor Win64 Development -OutputDir='${workspaceFolder}'",
+      "type": "process",
+      "command": "<UE_ROOT>/Engine/Build/BatchFiles/RunUBT.bat",
+      "args": ["-mode=GenerateClangDatabase", "-project=${workspaceFolder}/<Project>.uproject", "<Project>Editor", "Win64", "Development", "-OutputDir=${workspaceFolder}"],
       "problemMatcher": []
     },
     {
       "label": "UnrealSharp: Build managed",
-      "type": "shell",
-      "command": "dotnet build '${workspaceFolder}/<ScriptDirName>/<ManagedProjectName>.sln' -c Debug",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/<ScriptDirName>/<ManagedProjectName>.sln", "-c", "Debug"],
       "group": "build",
       "problemMatcher": "$msCompile"
     }
