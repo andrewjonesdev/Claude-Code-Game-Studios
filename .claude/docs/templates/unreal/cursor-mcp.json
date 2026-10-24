@@ -4,7 +4,7 @@
     "unreal-blueprints": {
       "command": "<absolute path to a verified python.exe, e.g. C:/Python311/python.exe>",
       "args": [
-        "${env:APPDATA}/Claude/Claude Extensions/local.mcpb.roly-blueprintslab.unreal-engine-pro-tools/mcp_main_server.py",
+        "<absolute path to mcp_main_server.py in the verified extension folder>",
         "--server-name",
         "unreal-handshake"
       ]

@@ -12,6 +12,8 @@ when a task needs the editor (see Setup and Other IDEs below).
 
 ---
 
+> **Migrating from an older checkout:** earlier versions of this fork committed a `.mcp.json` that auto-connected both servers. It is now gitignored, so an old copy can linger on disk and keep auto-connecting — delete your local `.mcp.json` and re-create it from the opt-in examples only when a task needs the editor.
+
 ## `unreal` — Epic's Unreal MCP (UE 5.8, Experimental)
 
 | Item | Value | Source |
