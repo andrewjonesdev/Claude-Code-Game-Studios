@@ -5,14 +5,15 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Technology Stack
 
-- **Engine**: [CHOOSE: Godot 4 / Unity / Unreal Engine 5]
-- **Language**: [CHOOSE: GDScript / C# / C++ / Blueprint]
+- **Engine**: Unreal Engine 5.7
+- **Language**: C++ (systems), Blueprint (gameplay), HTML/CSS/JS (UI via WebUI)
 - **Version Control**: Git with trunk-based development
-- **Build System**: [SPECIFY after choosing engine]
-- **Asset Pipeline**: [SPECIFY after choosing engine]
+- **Build System**: Unreal Build Tool (UBT)
+- **Asset Pipeline**: Unreal Content Pipeline + Fab Marketplace assets
 
-> **Note**: Engine-specialist agents exist for Godot, Unity, and Unreal with
-> dedicated sub-specialists. Use the set matching your engine.
+> **Active Agents**: Use Unreal specialist agents (`unreal-specialist`,
+> `ue-blueprint-specialist`, `ue-gas-specialist`, `ue-replication-specialist`,
+> `ue-umg-specialist`) for engine-specific decisions.
 
 ## Project Structure
 
@@ -26,7 +27,7 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
      session. It defaults to Godot (the template's example engine); skills that
      need the pinned version read docs/engine-reference/<engine>/VERSION.md on
      demand regardless of this import. -->
-@docs/engine-reference/godot/VERSION.md
+@docs/engine-reference/unreal/VERSION.md
 
 
 ## Technical Preferences

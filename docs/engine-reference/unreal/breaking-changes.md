@@ -92,6 +92,96 @@ New lighting system for many shadow-casting dynamic lights.
 
 ---
 
+### Build System — BuildSettingsVersion V6 (UE 5.7)
+**Versions:** UE 5.7+
+
+New build settings defaults that trigger warnings if not adopted:
+
+```cpp
+// In YourProject.Target.cs and YourProjectEditor.Target.cs:
+DefaultBuildSettings = BuildSettingsVersion.V6;
+
+// V6 defaults (breaking if not set):
+// - WindowsPlatform.bStrictInlineConformance = true (MSVC removes unreferenced COMDAT)
+// - UndefinedIdentifierWarningLevel = Error (was Off)
+// - C++20 standard (was C++17)
+// - bValidateFormatStrings = true (compile-time UE_LOG format validation)
+```
+
+**Migration:** Set `DefaultBuildSettings = BuildSettingsVersion.V6;` in both Target.cs files.
+
+---
+
+### C++ API Deprecations (UE 5.5+)
+
+```cpp
+// ❌ TSoftObjectPtr constructor from incompatible pointer (compile error in 5.7)
+// ❌ FObjectPtrProperty / FClassPtrProperty → use FObjectProperty / FClassProperty
+// ❌ FProperty::ElementSize → use GetElementSize()
+// ❌ TIsTriviallyDestructible → use std::is_trivially_destructible_v
+// ❌ UClass::ClassDefaultObject → use GetDefault<>() / GetMutableDefault<>()
+// ❌ PER_MODULE_BOILERPLATE → removed (UBT handles automatically)
+// ❌ FString::Appendf → now requires static constexpr format strings
+// ❌ FindObject bExactClass param → use EFindObjectFlags enum
+// ❌ StructUtils plugin → deprecated since 5.5 (moved into engine)
+```
+
+---
+
+### GAS — NonInstanced Abilities Deprecated (UE 5.5+)
+**Critical for projects using Gameplay Ability System.**
+
+NonInstanced gameplay abilities are deprecated. All abilities should be instanced.
+
+---
+
+### GAS — Replicated Loose Tags Removed (UE 5.7)
+
+```cpp
+// ❌ REMOVED in 5.7:
+// AddReplicatedLooseGameplayTags()
+// RemoveReplicatedLooseGameplayTags()
+```
+
+---
+
+### CommonUI — PushWidget Auto-Activates (UE 5.5+)
+**Will break UI code silently.**
+
+```cpp
+// ❌ OLD: Manual activation after push
+Widget = WidgetStack->PushWidget(MyWidgetClass);
+Widget->ActivateWidget(); // NOW BREAKS — double activation
+
+// ✅ NEW: PushWidget auto-activates
+Widget = WidgetStack->PushWidget(MyWidgetClass);
+// Widget is already activated
+```
+
+Also: `SetInputMode` is illegal with CommonUI — use `GetDesiredInputConfig` instead.
+
+---
+
+### Lumen SWRT Detail Traces Deprecated (UE 5.7)
+Focus shifted to HWRT (hardware ray tracing). SWRT detail traces deprecated.
+
+---
+
+### Linux: SDL2 → SDL3 (UE 5.7)
+Linux platform transitions from SDL2 to SDL3.
+
+---
+
+### Android 15+ Memory Pages (UE 5.6+)
+Android 15+ mandates 16 KB memory page sizes (up from 4 KB).
+
+---
+
+### Blueprint Variable Inheritance Bug (UE 5.6)
+Inherited variable values can be lost when migrating Blueprints from 5.5 to 5.6. Verify inherited defaults after migration.
+
+---
+
 ## MEDIUM RISK — Behavioral Changes
 
 ### Enhanced Input System (Now Default)
@@ -168,6 +258,30 @@ UE 5.8 toolchain and SDK requirements come from the 5.8 release notes'
 - **UE 5.8**: Android minimum install SDK level 26 (Android 8.0+); NDK r27c; minimum SDK for compiling UE 34, recommended 35; Gradle 8.7, AGP 8.5.2
 - **UE 5.8**: iOS / iPadOS / tvOS SDK 17 or later; Xcode 26.0 minimum, 26.1.1 recommended (iOS targets)
 - **UE 5.8**: iOS Shader Model 6 is Experimental
+
+---
+
+## NEW SYSTEMS — Post Training Data
+
+### Iris Replication System (Beta, UE 5.7)
+Opt-in replication system for large interactive worlds and high player counts.
+- Requires plugin enable + `SetupIrisSupport(Target)` in Build.cs
+- Structs are atomic by default (different from legacy non-atomic behavior)
+- Replaces Replication Graph (now considered legacy)
+- Filter types: Owner, Connection, Group
+
+### Mover Plugin (Experimental, UE 5.7)
+Movement system with rollback networking — eventual successor to Character Movement Component.
+**Note:** We use GMCv2 instead of CMC/Mover for this project.
+
+### In-Editor AI Assistant (UE 5.7)
+Slide-out panel for questions, C++ code generation, step-by-step guidance.
+
+### Nanite Foliage (Experimental, UE 5.7)
+Nanite Voxels for millions of leaf/needle details; Nanite Assemblies; Nanite Skinning for wind.
+
+### Procedural Vegetation Editor (PVE, UE 5.7)
+PCG-based node graph for growing/shaping/customizing Nanite-ready foliage in-editor.
 
 ---
 

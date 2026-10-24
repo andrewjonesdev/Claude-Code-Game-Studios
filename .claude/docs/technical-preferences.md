@@ -10,10 +10,19 @@
 
 ## Engine & Language
 
-- **Engine**: [TO BE CONFIGURED — run /setup-engine]
-- **Language**: [TO BE CONFIGURED]
-- **Rendering**: [TO BE CONFIGURED]
-- **Physics**: [TO BE CONFIGURED]
+- **Engine**: Unreal Engine 5.7
+- **Language**: C++ (systems/engine), Blueprint (gameplay/prototyping), HTML/CSS/JS (UI via WebUI plugin)
+- **Rendering**: Lumen GI, Nanite, Virtual Shadow Maps (UE 5.7 defaults)
+- **Physics**: Chaos Physics (UE 5.7 default)
+
+## Plugin Stack
+
+- **GMCv2** v2.3.7 (GRIMTEC) — Advanced replicated movement framework
+- **GMCAbilitySystem** v1.3 (reznok) — Ability/effect/attribute system built on GMC
+- **NarrativePro** (Narrative Tools) — Quest, dialogue, NPC, faction, inventory systems
+- **WebUI** — Web-based UI rendering (HTML/CSS/JS in-engine via Chromium)
+- **JsonLibrary** — JSON parsing/creation for Blueprint ↔ WebUI communication
+- **BpGeneratorUltimate** — Blueprint Copilot MCP bridge
 
 ## Input & Platform
 
@@ -29,40 +38,60 @@
 
 ## Naming Conventions
 
-- **Classes**: [TO BE CONFIGURED]
-- **Variables**: [TO BE CONFIGURED]
-- **Signals/Events**: [TO BE CONFIGURED]
-- **Files**: [TO BE CONFIGURED]
-- **Scenes/Prefabs**: [TO BE CONFIGURED]
-- **Constants**: [TO BE CONFIGURED]
+- **C++ Classes**: Prefixed PascalCase (`A` = Actor, `U` = UObject, `F` = struct, `E` = enum)
+- **Variables**: PascalCase (e.g., `MoveSpeed`, `MaxHealth`)
+- **Booleans**: `b` prefix (e.g., `bIsAlive`, `bCanSprint`)
+- **Functions**: PascalCase (e.g., `TakeDamage()`, `GetMoveSpeed()`)
+- **Files**: Match class without prefix (e.g., `PlayerController.h/.cpp`)
+- **Blueprints**: `BP_` prefix (e.g., `BP_PlayerCharacter`)
+- **Widget Blueprints**: `WBP_` prefix (e.g., `WBP_MainHUD`)
+- **Data Assets**: `DA_` prefix (e.g., `DA_WeaponStats`)
+- **Enums**: `E_` prefix (e.g., `E_WeaponType`)
+- **Structs**: `S_` or `F` prefix (e.g., `FWeaponData`)
+- **Materials**: `M_` prefix (e.g., `M_Character_Base`)
+- **Material Instances**: `MI_` prefix (e.g., `MI_Character_Red`)
+- **Textures**: `T_` prefix (e.g., `T_Character_Diffuse`)
+- **Gameplay Tags**: Dot-separated hierarchy (e.g., `Ability.Sprint`, `Attribute.Health`)
+- **Constants**: UPPER_SNAKE_CASE or static constexpr
 
 ## Performance Budgets
 
-- **Target Framerate**: [TO BE CONFIGURED]
-- **Frame Budget**: [TO BE CONFIGURED]
-- **Draw Calls**: [TO BE CONFIGURED]
-- **Memory Ceiling**: [TO BE CONFIGURED]
+- **Target Framerate**: [TO BE CONFIGURED — typical: 60fps for gameplay, 30fps minimum]
+- **Frame Budget**: [TO BE CONFIGURED — 16.6ms at 60fps]
+- **Draw Calls**: [TO BE CONFIGURED — depends on target platform]
+- **Memory Ceiling**: [TO BE CONFIGURED — depends on target platform]
 
 ## Testing
 
-- **Framework**: [TO BE CONFIGURED]
+- **Framework**: Unreal Automation Framework (C++ functional tests + Blueprint tests)
 - **Minimum Coverage**: [TO BE CONFIGURED]
-- **Required Tests**: Balance formulas, gameplay systems, networking (if applicable)
+- **Required Tests**: Balance formulas, gameplay systems, ability effects, weapon stats
 
 ## Forbidden Patterns
 
 <!-- Add patterns that should never appear in this project's codebase -->
-- [None configured yet — add as architectural decisions are made]
+- Direct UMG widget creation for game UI (use WebUI instead)
+- Hardcoded gameplay values (use Data Assets or config)
+- Tick-heavy logic without profiling justification
+- Raw `UGameplayStatics::GetAllActorsOfClass` in hot paths
 
 ## Allowed Libraries / Addons
 
-<!-- Add approved third-party dependencies here -->
-- [None configured yet — add as dependencies are approved]
+- GMCv2 v2.3.7 (movement framework)
+- GMCAbilitySystem v1.3 (ability system)
+- NarrativePro (quest/dialogue)
+- WebUI (web-based UI)
+- JsonLibrary (JSON for Blueprint)
+- BpGeneratorUltimate (MCP Blueprint tooling)
+- Fab/Marketplace asset packs (approved per-pack basis)
 
 ## Architecture Decisions Log
 
 <!-- Quick reference linking to full ADRs in docs/architecture/ -->
-- [No ADRs yet — use /architecture-decision to create one]
+- ADR-001: WebUI for game UI instead of UMG (rationale: web tech flexibility, easier iteration)
+- ADR-002: GMC for movement instead of CMC (rationale: advanced replication, prediction)
+- ADR-003: GMAS for abilities instead of GAS (rationale: native GMC integration, client prediction)
+- [Use /architecture-decision to create formal ADRs]
 
 ## Engine Specialists
 

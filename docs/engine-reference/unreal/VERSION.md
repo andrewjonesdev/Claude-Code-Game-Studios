@@ -2,11 +2,11 @@
 
 | Field | Value |
 |-------|-------|
-| **Engine Version** | Unreal Engine 5.8 |
-| **Installed at pin time** | NOT DETERMINED — `/setup-engine` §3 probes the installed editor and records the result here. |
-| **Release Date** | June 2026 (5.8.0); latest hotfix 5.8.3, September 2026 |
-| **Project Pinned** | 2026-10-17 |
-| **Last Docs Verified** | 2026-10-17 (release timeline, 5.8 release notes, and the 5.8 changes recorded in this directory); 2026-02-13 (rest of directory, written against 5.7) |
+| **Engine Version** | Unreal Engine 5.7 |
+| **Release Date** | November 2025 |
+| **Project Pinned** | 2026-03-25 |
+| **Last Docs Verified** | 2026-03-25 |
+| **Upstream reference** | Template docs now cover UE 5.8 (5.8.3, Sep 2026); this project stays pinned to 5.7 for NarrativeGMC — re-run /setup-engine when moving to 5.8. |
 | **LLM Knowledge Cutoff** | May 2025 |
 
 ## Knowledge Gap Warning
@@ -81,6 +81,23 @@ from the same threads and from the 5.7 and 5.8 release notes (Verified Sources b
 - **Old PCG API**: Use new production-ready PCG API (5.7+)
 - **Raw Input plugin (5.8)**: Deprecated in favour of the Game Input for Windows plugin
 - **`UE_LOG` (5.8)**: Still supported; Epic says it "will eventually be deprecated" and asks for `UE_LOGF`
+
+## Build Configuration (Verified)
+
+- **BuildSettingsVersion**: V6 (required — V5 triggers upgrade warnings about inline conformance and undefined identifiers)
+- **IncludeOrderVersion**: Latest
+- **WindowsPlatform.bStrictInlineConformance**: true (new V6 default)
+- **UndefinedIdentifierWarningLevel**: Error (new V6 default)
+- **StructUtils module**: Deprecated since 5.5 but still functional (GMCAbilitySystem depends on it)
+
+## Project Plugin Stack
+
+- **GMCv2** v2.3.7 — Fab/Marketplace (prebuilt binaries)
+- **GMCAbilitySystem** v1.3 — Source plugin, compiled locally in project Plugins/
+- **NarrativePro** — Fab/Marketplace
+- **WebUI** — Fab/Marketplace (Chromium-based web rendering)
+- **JsonLibrary** — Fab/Marketplace (JSON for Blueprint)
+- **BpGeneratorUltimate** — Fab/Marketplace (MCP Blueprint bridge)
 
 ## Verified Sources
 
