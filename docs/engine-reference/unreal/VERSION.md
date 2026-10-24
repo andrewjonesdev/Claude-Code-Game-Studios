@@ -82,7 +82,7 @@ from the same threads and from the 5.7 and 5.8 release notes (Verified Sources b
 - **Raw Input plugin (5.8)**: Deprecated in favour of the Game Input for Windows plugin
 - **`UE_LOG` (5.8)**: Still supported; Epic says it "will eventually be deprecated" and asks for `UE_LOGF`
 
-## Build Configuration (verified on 5.7)
+## Build Configuration (recorded 2026-03-25 on 5.7 — recheck on 5.8)
 
 - **BuildSettingsVersion**: V6 (required — V5 triggers upgrade warnings about inline conformance and undefined identifiers)
 - **IncludeOrderVersion**: Latest
@@ -95,9 +95,9 @@ from the same threads and from the 5.7 and 5.8 release notes (Verified Sources b
 Versions and 5.7/5.8 build status: `plugins/gmc-narrative.md` (gameplay stack),
 `plugins/unrealsharp.md` (C#), `mcp.md` (editor MCP servers).
 
-- **GMCv2** — Fab (prebuilt binaries); 2.3.7 on 5.7, 5.8 build installed
+- **GMCv2** — Fab (prebuilt binaries); 2.3.7 verified on 5.7; 2.3.9 installed for 5.8 (unverified with NarrativeGMC)
 - **GMCAbilitySystem (GMAS)** — source plugin in project `Plugins/`; 1.3 on 5.7, 5.8 not yet built
-- **Narrative Pro** — Fab; installed for 5.7 and 5.8
+- **Narrative Pro** — Fab; 2.2.6+ on 5.7; 2.4.2 installed for 5.8 (unverified with NarrativeGMC)
 - **NarrativeGMC** — our bridge plugin (`andrewjonesdev/NarrativeGMC`)
 - **UnrealSharp** — C# scripting (MIT, pin a commit)
 - **WebUI** + **JsonLibrary** — Fab (Chromium UI, JSON for Blueprint)

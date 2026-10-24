@@ -20,11 +20,11 @@ teammates; the second column is the tool they run on.
 | Teammate | Runs on | Seat(s) | CLI |
 |---|---|---|---|
 | **Clahadore** | Claude (this session) | Implementer; council seat (advisory-only when Claude wrote the work) | — |
-| **Cedric "Cody"** | Codex / ChatGPT (`gpt-5.6-sol`, reasoning high) | Chair (synthesis) + seat | `codex exec` |
-| **Jenny** (Regular) | Gemini 3.1 Pro, high | Correctness / design / regression | `agy` |
-| **Jenny** (Cyber) | Gemini 3.6 Flash, high, adversarial-security prompt | Security seat — **not** Gemini 3.5 Flash Cyber | `agy` |
-| **Gronktayvius "Gronk"** (General) | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
-| **Gronktayvius** (Red Team) | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
+| **Cedric** | Codex / ChatGPT (`gpt-5.6-sol`, reasoning high) | Chair (synthesis) + seat | `codex exec` |
+| **Regular Jenny** | Gemini 3.1 Pro, high | Correctness / design / regression | `agy` |
+| **Cyber Jenny** | Gemini 3.6 Flash, high, adversarial-security prompt | Security seat — **not** Gemini 3.5 Flash Cyber | `agy` |
+| **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
+| **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
 | **Susie Franny** | Meta Muse Spark | Seat (probation) | `muse exec` |
 
 Families, for quorum: Claude, OpenAI, Google, xAI, Meta. **Two seats from one
@@ -36,6 +36,13 @@ If the user's machine has the fleet skills `/council-code-review` and
 seat isolation, validation and failure contract. The rules below are the
 contract those skills implement; they apply directly only where the skills are
 absent.
+
+### Author family
+
+The author family is the model family that wrote the change under review, taken
+from the commit's `Co-Authored-By` lines and the PR body's authorship line. When
+work is mixed, every contributing family is an author family. When unknown,
+treat Claude as the author (this session's family).
 
 ## Tiers — `council.tier`
 
@@ -63,14 +70,17 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
 
 1. Run `bash .claude/scripts/council-preflight.sh`. It reports which CLIs are
    installed and which fleet skills exist. It does not decide anything.
-2. Seat every family that is present, in this order: Cedric, Jenny, Susie
-   Franny, Gronktayvius. A seat the usage governor denies counts as absent.
-3. Chair: Cedric if seated and not the author; otherwise the strongest non-author
-   seat; otherwise Clahadore.
+2. Seat every family that is present, in this order: Cedric, Regular Jenny, Susie
+   Franny, Gronktayvius General. A seat the usage governor denies counts as absent.
+3. Chair: Cedric if seated and not the author; otherwise the strongest seated
+   non-author; if no non-author seat exists,
+   there is no chair and the gate fails.
 4. **Quorum: 2 independent non-author families.** Claude counts only when it
    did not author the work.
 5. Below quorum:
-   - Ordinary gates proceed, and the verdict is stamped **`DEGRADED (n/2 families)`**
+   - Ordinary gates may proceed **only when n ≥ 1** (at least one non-author
+     family seated and producing findings); with **n = 0 the gate fails**.
+     The verdict is stamped **`DEGRADED (n/2 families)`**
      with the missing seats named. A degraded PASS is reported as degraded, never
      as a plain PASS.
    - **Security-sensitive and release gates fail closed.** They may proceed only
@@ -91,10 +101,16 @@ Upstream CCGS behaviour. For jams and throwaway prototypes.
 
 ## Where the council sits
 
-`modes.review_mode` decides **whether** a gate runs. `council.tier` decides
-**who besides the director** reviews it. A gate skipped by `review_mode` gets no
-council either. Two exceptions run at every `review_mode` unless the tier is
-`off`: the commit gate and security-sensitive work.
+`council.tier` decides **who besides the director** reviews a gate. Unless the
+tier is `off`, the commit gate and security-sensitive work convene the council
+even when `review_mode` skips the director gate. All other rows follow the
+director gate's mode check.
+
+0. Before any diff or document goes to a seat, scan it for secrets: run
+   `gitleaks detect --no-git --source <file>` when gitleaks is installed; otherwise
+   grep for private keys, `AKIA`, `ghp_`, `sk-`, `xox`, `password=`, and `.env`
+   content. Exclude `.env*`, `*.pem`, `*.key`, and `project.local.yaml` from seat
+   packets. A hit stops the sitting until the secret is removed.
 
 | Gate point | Director gate | Council mode |
 |---|---|---|
@@ -140,3 +156,8 @@ A seat that produced no tokens is `FAILED`, never "no objections".
 - Run a seat with the live working tree as its writable cwd (the fleet skills
   use a disposable checkout; do the same by hand)
 - Send secrets, credentials, `.env` files or real player data to any seat
+- Send any diff or document before scanning it for secrets: run
+  `gitleaks detect --no-git --source <file>` when installed; otherwise grep for
+  private keys, `AKIA`, `ghp_`, `sk-`, `xox`, `password=`, and `.env` content.
+  Exclude `.env*`, `*.pem`, `*.key`, and `project.local.yaml` from seat packets.
+  A hit stops the sitting until the secret is removed.

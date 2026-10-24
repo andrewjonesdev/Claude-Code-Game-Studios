@@ -53,10 +53,10 @@ game project's `.vscode/` and fill the `<PLACEHOLDERS>`.
    hostfxr inside `UnrealEditor.exe`. If it fails, record the error here; the
    fallback is Rider or Visual Studio for debugging sessions only, with
    Cursor/Antigravity for editing — hot reload is unaffected either way.
-7. **Debug C++**: the *UE: Launch editor (C++ native)* config uses the `cppvsdbg`
-   type, which needs Microsoft's C/C++ extension and therefore will not run in a
-   fork. Use CodeLLDB (`vadimcn.vscode-lldb`) with `type: lldb` instead, or attach
-   from Visual Studio. Unverified on UE 5.8 PDBs.
+7. **Debug C++**: the *UE: Launch editor (native — CodeLLDB, limited PDB support on Windows, unverified)*
+   config uses CodeLLDB (`vadimcn.vscode-lldb`) with `type: lldb`. CodeLLDB's
+   support for MSVC/PDB Windows binaries is limited; for real native debugging
+   attach from Visual Studio or Rider.
 
 ## Hands-on verification checklist (run once, then update this doc)
 

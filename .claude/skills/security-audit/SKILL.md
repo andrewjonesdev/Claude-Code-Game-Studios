@@ -3,7 +3,7 @@ name: security-audit
 description: "Security audit — save tampering, cheat vectors, network exploits, data exposure, input validation. Before public or multiplayer release."
 argument-hint: "[full | network | save | input | quick]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Agent, Bash(bash "*/.claude/skills/security-audit/../../hooks/yaml-helper.sh" resolve_config *)
+allowed-tools: Read, Glob, Grep, Write, Agent, Bash(bash "*/.claude/skills/security-audit/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/council-preflight.sh), Bash(bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier)
 model: sonnet
 ---
 
@@ -269,6 +269,14 @@ For each finding, assign:
 ---
 
 ## Phase 5: Generate Report
+
+### Council review
+
+Resolve `council_tier` with `bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier` (unset = `available`, `off` = skip).
+Run `bash .claude/scripts/council-preflight.sh`; convene per `.claude/docs/council.md`.
+Prefer the `/council-code-review` fleet skill for diffs.
+Seat Cyber Jenny + Gronktayvius Red Team + Regular Jenny; Cedric adjudicates.
+A missing required seat fails closed unless a waiver is logged per `council.md`; combine verdicts most-severe-wins.
 
 ```markdown
 # Security Audit Report

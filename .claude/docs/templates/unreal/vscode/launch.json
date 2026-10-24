@@ -1,6 +1,9 @@
 {
-  // UNVERIFIED (2026-10-24): DotRush attach to the CoreCLR hosted inside
-  // UnrealEditor.exe. Record the result in docs/engine-reference/unreal/ide-cursor-antigravity.md.
+  // UNVERIFIED (2026-10-24): The debug type name must match the installed debugger
+  // extension. DotRush registers its own CoreCLR debugger — confirm the type it
+  // contributes in its package.json and update the type below. Attach to the CoreCLR
+  // hosted inside UnrealEditor.exe is unverified; record the result in
+  // docs/engine-reference/unreal/ide-cursor-antigravity.md.
   "version": "0.2.0",
   "configurations": [
     {
@@ -10,7 +13,7 @@
       "processId": "${command:dotrush.pickProcess}"
     },
     {
-      "name": "UE: Launch editor (lldb, C++ native)",
+      "name": "UE: Launch editor (native — CodeLLDB, limited PDB support on Windows, unverified)",
       "type": "lldb",
       "request": "launch",
       "program": "<UE_ROOT>/Engine/Binaries/Win64/UnrealEditor.exe",

@@ -24,7 +24,16 @@ root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 tier_line=$(bash "$root/.claude/hooks/yaml-helper.sh" resolve_config --keys council_tier 2>/dev/null | grep '^council_tier:' || true)
 echo "tier: ${tier_line#council_tier: }"
 
-grok_exe="${COUNCIL_GROK_EXE:-$HOME/source/repos/usage-governor/publish/UsageGovernor.exe}"
+grok_cli=grok
+if command -v grok >/dev/null 2>&1; then
+  grok_exe=grok
+elif [ -n "${COUNCIL_GROK_EXE:-}" ]; then
+  grok_exe="$COUNCIL_GROK_EXE"
+  grok_cli="$grok_exe"
+else
+  grok_exe="$HOME/source/repos/usage-governor/publish/UsageGovernor.exe"
+  grok_cli="$grok_exe"
+fi
 # Muse Code installs a .cmd launcher outside PATH on Windows.
 muse_cli=muse
 if ! command -v muse >/dev/null 2>&1 && [ -n "${LOCALAPPDATA:-}" ]; then
@@ -49,7 +58,7 @@ seat() {  # teammate family cli-name probe
 seat "Clahadore"            claude  claude-code  "claude"
 seat "Cedric"               openai  codex        "codex"
 seat "Jenny"                google  agy          "agy"
-seat "Gronktayvius"         xai     grok-exec    "$grok_exe"
+seat "Gronktayvius"         xai     "$grok_cli"  "$grok_exe"
 seat "Susie-Franny"         meta    muse         "$muse_cli"
 
 for s in council-code-review llm-council; do

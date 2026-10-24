@@ -3,7 +3,7 @@ name: release-checklist
 description: "Pre-release checklist — build verification, certification requirements, store metadata, launch readiness."
 argument-hint: "[platform: pc|console|mobile|all]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Write, Bash(bash "*/.claude/skills/release-checklist/../../hooks/yaml-helper.sh" resolve_config *)
+allowed-tools: Read, Glob, Grep, Write, Bash(bash "*/.claude/skills/release-checklist/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/council-preflight.sh), Bash(bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier)
 model: sonnet
 ---
 !`bash "${CLAUDE_SKILL_DIR}/../../hooks/yaml-helper.sh" resolve_config --keys rigor,workflow,project.stage,cert_tier,automation`
@@ -109,6 +109,14 @@ passing one must not produce the same release checklist.
 ---
 
 ## Phase 4: Generate the Release Checklist
+
+### Council review
+
+Resolve `council_tier` with `bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier` (unset = `available`, `off` = skip).
+Run `bash .claude/scripts/council-preflight.sh`; convene per `.claude/docs/council.md`.
+Prefer the `/council-code-review` fleet skill for diffs.
+- [ ] Full available panel + both security seats (Cyber Jenny and Gronktayvius Red Team) completed; missing required seats fail closed unless a waiver is logged per `council.md`.
+Combine council and checklist verdicts most-severe-wins before producing Go / No-Go.
 
 ```markdown
 ## Release Checklist: [Version] -- [Platform]

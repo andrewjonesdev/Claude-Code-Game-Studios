@@ -28,7 +28,9 @@ a patch forces it" — see `ue-gmc-specialist` → Forking Policy.
 | Engine | GMCv2 | GMAS | Narrative Pro | NarrativeGMC | Status |
 |---|---|---|---|---|---|
 | 5.7 | 2.3.7 | 1.3 | 2.2.6+ | 0.1.0 (master, 2026-03-25) + WT-9561 audit fixes | Built (host project `NGMCHost`) |
-| 5.8 | installed | not installed | installed (2.4/3.x — confirm) | port in progress (FLT-282) | **Unverified** |
+| 5.8 | 2.3.9 installed | not installed | 2.4.2 installed | port in progress (FLT-282) | **Unverified** |
+
+Build hosts: DESKTOP-D249KD4 (gaming) has UE 5.7.4 and 5.8.3 at `A:\Epic Games\` with the Fab plugins; greatroom has 5.5–5.8. An UnrealSharp spike built and packaged on 5.8 on the gaming PC (2026-10-24).
 
 Update this table from build receipts only.
 

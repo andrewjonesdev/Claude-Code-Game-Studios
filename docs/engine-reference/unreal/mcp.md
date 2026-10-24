@@ -24,6 +24,8 @@ reads; Cursor and Antigravity need their own copy (see the bottom).
 | Start by hand | console `ModelContextProtocol.StartServer [port]` | `ModelContextProtocolModule.cpp:33` |
 | Security | localhost Origin only; requests with no Origin header pass | `ModelContextProtocolServer.cpp:73-119` |
 
+**Security:** No authentication; requests without an `Origin` header are accepted, and MCP clients normally send none, so any process on the machine can drive the editor while the server runs. Start it only when needed, keep the port bound to localhost, never forward/expose it, and stop it (or close the editor) when done.
+
 Setup per project: enable **Unreal MCP** (and its Toolset plugins) in
 `Edit > Plugins`, restart, then either tick *Auto Start Server* in Editor
 Preferences or run `ModelContextProtocol.StartServer`. The tool set comes from
@@ -42,6 +44,8 @@ Not available on 5.7. A 5.7 project uses BpGenerator only.
 | Editor link | raw TCP to `localhost:9877` (hard-coded) |
 | Python | 3.10+, `pip install mcp`; no other deps |
 | Tool prefix | `mcp__unreal-blueprints__*` from `.mcp.json`; `mcp__Unreal_Engine_Pro_Tools__*` from the Desktop extension |
+
+**Security:** The raw TCP 9877 channel is unauthenticated; any local process can send it commands and drive the editor while the server runs. Start it only when needed, keep the port bound to localhost, never forward/expose it, and stop it (or close the editor) when done.
 
 In Claude Desktop the extension already provides these tools, so the
 `.mcp.json` copy duplicates them; disable `unreal-blueprints` there
@@ -74,5 +78,5 @@ entries rather than removing the list. Usage rules live in `unreal-specialist`
 - **Antigravity**: MCP servers are configured in the agent panel's
   *Manage MCP Servers → View raw config* (`mcp_config.json`). Same entries,
   absolute paths. Template: `.claude/docs/templates/unreal/antigravity-mcp.json`.
-  The HTTP key is written as `serverUrl` in the template — **unverified**;
-  if Antigravity rejects it, try `url` and record which worked here.
+  The HTTP key is written as `serverUrl` in the template, following the
+  Windsurf-style `mcp_config.json` convention — **unverified**. Cursor uses `url`.

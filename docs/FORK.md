@@ -21,9 +21,11 @@ Remotes: `origin` = this fork, `upstream` = Donchitos (push disabled).
 
 ```bash
 git fetch upstream
-git switch -c wt/<WT-id>/upstream-<version> main
+git switch -c wt/WT_ID/upstream-VERSION main
 git merge upstream/main
 ```
+
+Replace WT_ID and VERSION.
 
 Expect conflicts in files both sides edit: `.claude/hooks/yaml-helper.sh`
 (the `council.tier` lines), `.claude/docs/effects-map.md`,

@@ -10,7 +10,8 @@
 
 ## Engine & Language
 
-- **Engine**: Unreal Engine 5.8 (moved from 5.7 on 2026-10-24; NarrativeGMC 5.8 port in progress)
+- **Engine**: Unreal Engine 5.8
+- **Engine Note**: moved from 5.7 on 2026-10-24; NarrativeGMC 5.8 port in progress
 - **Language**: C# via UnrealSharp (gameplay), C++ (engine-facing, GMC/GMAS subclasses, per-frame paths), Blueprint (content and designer tuning), HTML/CSS/JS (UI via WebUI plugin)
 - **Gameplay Framework**: GMCv2 + GMAS + Narrative Pro, joined by the NarrativeGMC bridge
 - **Rendering**: Lumen GI, Nanite, Virtual Shadow Maps (UE 5.8 defaults)
@@ -115,11 +116,11 @@
 <!-- to know which specialist to spawn for engine-specific validation. -->
 
 - **Primary**: unreal-specialist
-- **Language/Code Specialist**: ue-csharp-specialist (C# via UnrealSharp); unreal-specialist for C++
+- **Language/Code Specialist**: ue-csharp-specialist
 - **Shader Specialist**: unreal-specialist
-- **UI Specialist**: ue-umg-specialist (WebUI integration; no direct UMG game UI)
-- **Additional Specialists**: ue-gmc-specialist (GMCv2, GMAS, Narrative Pro, NarrativeGMC), ue-blueprint-specialist, ue-replication-specialist
-- **Routing Notes**: Movement, abilities, attributes and Narrative components go to ue-gmc-specialist first. C# gameplay goes to ue-csharp-specialist; anything touching a GMC/GMAS base class or the per-frame move loop is C++ and goes to unreal-specialist with ue-gmc-specialist review. Editor changes go through the Unreal MCP servers.
+- **UI Specialist**: ui-programmer
+- **Additional Specialists**: ue-gmc-specialist, ue-blueprint-specialist, ue-replication-specialist
+- **Routing Notes**: Movement, abilities, attributes and Narrative components go to ue-gmc-specialist first. C# gameplay goes to ue-csharp-specialist; anything touching a GMC/GMAS base class or the per-frame move loop is C++ and goes to unreal-specialist with ue-gmc-specialist review. UI uses WebUI, not UMG, and goes to ui-programmer. Editor changes go through the Unreal MCP servers.
 
 ### File Extension Routing
 
@@ -132,7 +133,7 @@
 | C++ (`.cpp`, `.h`) | unreal-specialist |
 | Movement / ability / Narrative code | ue-gmc-specialist |
 | Shader / material files | unreal-specialist |
-| UI / screen files (WebUI HTML/CSS/JS) | ue-umg-specialist |
+| UI / screen files (WebUI HTML/CSS/JS) | ui-programmer |
 | Scene / prefab / level files | unreal-specialist |
 | Native extension / plugin files | unreal-specialist |
 | General architecture review | Primary |

@@ -133,6 +133,7 @@ release work), a gate that survives the mode check **also** convenes the council
 
 1. Resolve `council_tier` (`resolve_config --keys review_mode,council_tier`).
    Unset means `available`; `off` means skip this subsection.
+   Exception: the commit gate and security-sensitive work convene the council even when this mode check skipped the director (see `council.md`).
 2. Run `bash .claude/scripts/council-preflight.sh` and seat per `council.md` for
    that tier. Prefer the fleet skills `/council-code-review` (diffs) and
    `/llm-council` (documents) when the preflight reports them present.

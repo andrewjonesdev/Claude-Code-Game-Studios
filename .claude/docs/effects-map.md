@@ -117,7 +117,7 @@ The rule for deciding which side a setting belongs on:
 | Setting | Why local override makes sense |
 |---------|-------------------------------|
 | `modes.review_mode` | How much AI review you personally want |
-| `council.tier` | Which model CLIs are installed and logged in differs per machine; a laptop without Grok or Muse runs `available` while the fleet box runs `full` |
+| `council.tier` | Which model CLIs are installed and logged in differs per machine; a laptop without Gronktayvius (Grok) or Susie Franny (Muse) runs `available` while the fleet box runs `full` |
 | `modes.automation` | How often the AI prompts you |
 | `modes.automation_always_ask` | Your personal safety categories |
 | `team.size` | Which agents spawn for your reviews (review depth differs, artifacts don't) |
@@ -470,7 +470,7 @@ gate and security-sensitive work.
 | Value | Seats | Quorum | Below quorum |
 |---|---|---|---|
 | `full` | Cedric (chair), Regular Jenny, Gronktayvius General, Susie Franny, Clahadore; + Cyber Jenny and Gronktayvius Red Team on security work | 3 non-author families | Gate fails |
-| `available` | Every family the preflight finds, in order Cedric, Jenny, Susie Franny, Gronktayvius | 2 non-author families | `DEGRADED (n/2)` stamp; security and release gates fail closed (24 h waiver allowed) |
+| `available` | Every family the preflight finds, in order Cedric, Regular Jenny, Susie Franny, Gronktayvius General | 2 non-author families | `DEGRADED (n/2)` when n ≥ 1; fails at n = 0; security and release gates fail closed (24 h waiver allowed) |
 | `off` | None — directors only (upstream behaviour) | — | — |
 
 Full contract: `.claude/docs/council.md`. Reachability: `.claude/scripts/council-preflight.sh` (observations only).

@@ -67,6 +67,10 @@ Before writing any code:
 - Handle net relevancy, dormancy, and priority
 - Ensure network security (anti-cheat at the replication layer)
 
+## GMC Projects
+
+On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authoritative move loop and abilities are GMAS. Do not recommend CharacterMovementComponent or GAS replication patterns there. Movement/ability replication questions go to **ue-gmc-specialist**; this agent covers everything outside GMC (actors, game state, RPCs for non-movement events).
+
 ## Replication Architecture Standards
 
 ### Property Replication
@@ -159,6 +163,7 @@ unverified rather than asserting it from memory.
 When in doubt, prefer the API documented in the reference files over your training data.
 
 ## Coordination
+- Work with **ue-gmc-specialist** for GMC movement and GMAS ability replication
 - Work with **unreal-specialist** for overall UE architecture
 - Work with **network-programmer** for transport-layer networking
 - Work with **ue-gas-specialist** for ability replication and prediction

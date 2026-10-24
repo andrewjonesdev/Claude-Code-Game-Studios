@@ -141,7 +141,7 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 - **Shader Specialist**: unreal-specialist (no dedicated shader specialist — primary covers materials)
 - **UI Specialist**: ue-umg-specialist (UMG widgets, CommonUI, input routing, widget styling)
 - **Additional Specialists**: ue-gas-specialist (Gameplay Ability System, attributes, gameplay effects) — **or**, on the GMCv2 / GMAS / Narrative Pro stack, ue-gmc-specialist (predicted movement, GMAS abilities, Narrative components, NarrativeGMC bridge); ue-replication-specialist (property replication, RPCs, client prediction, netcode)
-- **Routing Notes**: Invoke primary for C++ architecture and broad engine decisions. Invoke Blueprint specialist for Blueprint graph architecture and BP/C++ boundary design. Invoke GAS specialist for all ability and attribute code. Invoke replication specialist for any multiplayer or networked systems. Invoke UMG specialist for all UI implementation.
+- **Routing Notes**: Invoke primary for C++ architecture and broad engine decisions. Invoke Blueprint specialist for Blueprint graph architecture and BP/C++ boundary design. Invoke GAS specialist for all ability and attribute code — or, on the GMC framework, ue-gmc-specialist for ability, attribute, movement and Narrative code (never both). Invoke replication specialist for any multiplayer or networked systems. Invoke UMG specialist for all UI implementation.
 
 ### File Extension Routing
 
