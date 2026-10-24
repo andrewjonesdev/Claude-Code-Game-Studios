@@ -66,5 +66,7 @@ for s in council-code-review llm-council; do
   echo "skill: $s status=$st"
 done
 
+if [ -f "$root/.mcp.json" ]; then echo "mcp_config: local .mcp.json present (servers in it auto-connect; recreate from the opt-in examples only when a task needs the editor)"; else echo "mcp_config: none"; fi
+
 set -- $families
 echo "families_present: $# (${families# })"
