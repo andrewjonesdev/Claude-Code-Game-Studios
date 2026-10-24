@@ -94,6 +94,8 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
      with a logged waiver: approver, reason, gate, story/commit, ISO-8601 UTC
      expiry no more than 24 hours away. An expired or incomplete waiver fails.
 
+Susie Franny (Red Team) is required on security-sensitive and release work. If the preflight reports `muse` absent or the seat fails, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+
 ### `off` — Claude directors only
 
 Upstream CCGS behaviour. For jams and throwaway prototypes.
@@ -126,7 +128,7 @@ director gate's mode check.
 | `/create-architecture` sign-off | TD-ARCHITECTURE | `/llm-council` on the architecture doc |
 | `/architecture-decision` before Accepted | TD-ADR | `/llm-council` on the ADR |
 | `/gate-check` phase transitions | CD/TD/PR/AD-PHASE-GATE | `/llm-council` on the gate packet |
-| `/security-audit`, any security-sensitive change | — | Security seats: Regular Jenny, Cyber Jenny, Gronktayvius Red Team, Susie Franny (Red Team); Cedric adjudicates. Security quorum: at least two non-author families among the security seats; Google (either Jenny) counts once, xAI once, Meta once. Susie Franny's Red Team seat never substitutes for, or is relabelled as, Gronktayvius Red Team |
+| `/security-audit`, any security-sensitive change | — | Security seats: Regular Jenny, Cyber Jenny, Gronktayvius Red Team, Susie Franny (Red Team); Cedric adjudicates. Security quorum: at least two non-author families among the security seats and the adjudicator; Google (either Jenny) counts once, xAI (Gronktayvius Red Team) once, Meta (Susie Franny Red Team) once, and OpenAI (Cedric) once when Codex did not author the change. Susie Franny's Red Team seat never substitutes for, or is relabelled as, Gronktayvius Red Team |
 | `/release-checklist` | — | Full available panel **and** all security seats including Susie Franny (Red Team) |
 
 TD-ARCHITECTURE and `/security-audit` sittings require the data-flow diagram + STRIDE table from `security-baseline.md`. [threat-modeling deck ch.1, 9, 10, 12]

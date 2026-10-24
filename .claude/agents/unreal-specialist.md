@@ -100,8 +100,8 @@ list are in `docs/engine-reference/unreal/mcp.md`.
 
 | Server | Tools | Needs |
 |---|---|---|
-| `unreal` — Epic's **Unreal MCP** (UE 5.8, Experimental) | `mcp__unreal__*` — assets, Blueprints, levels, materials, meshes via the Toolset Registry | `ModelContextProtocol` plugin enabled, server started in the open editor (`http://localhost:8000/mcp`) |
-| `unreal-blueprints` — BlueprintsLab **BpGenerator Ultimate** ("Unreal Engine Pro Tools") | `mcp__unreal-blueprints__*`, or `mcp__Unreal_Engine_Pro_Tools__*` when it comes from the Claude Desktop extension | BpGenerator Ultimate plugin enabled, editor open (TCP `localhost:9877`) |
+| `unreal` — Epic's **Unreal MCP** (UE 5.8, Experimental) | `mcp__unreal__*` — assets, Blueprints, levels, materials, meshes via the Toolset Registry | server entry copied from the opt-in example, `ModelContextProtocol` plugin enabled, server started in the open editor (`http://localhost:8000/mcp`) |
+| `unreal-blueprints` — BlueprintsLab **BpGenerator Ultimate** ("Unreal Engine Pro Tools") | `mcp__unreal-blueprints__*`, or `mcp__Unreal_Engine_Pro_Tools__*` when it comes from the Claude Desktop extension | server entry copied from the opt-in example, BpGenerator Ultimate plugin enabled, editor open (TCP `localhost:9877`) |
 
 Rules:
 - **Read before you write.** Inspect (`get_asset_summary`, `list_assets_in_folder`,

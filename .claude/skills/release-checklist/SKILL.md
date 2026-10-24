@@ -115,7 +115,10 @@ passing one must not produce the same release checklist.
 Resolve `council_tier` with `bash "${CLAUDE_SKILL_DIR}/../../hooks/yaml-helper.sh" resolve_config --keys council_tier` (unset = `available`, `off` = skip).
 Run `bash "${CLAUDE_SKILL_DIR}/../../scripts/council-preflight.sh"`; convene per `.claude/docs/council.md`.
 Prefer the `/council-code-review` fleet skill for diffs.
-- [ ] Full available panel + all security seats (Regular Jenny, Cyber Jenny, Gronktayvius Red Team and Susie Franny (Red Team)) completed; missing required seats fail closed unless a waiver is logged per `council.md`.
+- [ ] Full available panel + all security seats (Regular Jenny, Cyber Jenny, Gronktayvius Red Team and Susie Franny (Red Team)) completed; missing or failed required seats fail closed unless a 24 h waiver is logged per `council.md`.
+
+Susie Franny (Red Team) is required on security-sensitive and release work. If the preflight reports `muse` absent or the seat fails, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+
 Combine council and checklist verdicts most-severe-wins before producing Go / No-Go.
 
 ```markdown

@@ -275,7 +275,10 @@ For each finding, assign:
 Resolve `council_tier` with `bash "${CLAUDE_SKILL_DIR}/../../hooks/yaml-helper.sh" resolve_config --keys council_tier` (unset = `available`, `off` = skip).
 Run `bash "${CLAUDE_SKILL_DIR}/../../scripts/council-preflight.sh"`; convene per `.claude/docs/council.md`.
 Prefer the `/council-code-review` fleet skill for diffs.
-Seat per `council.md` for the resolved tier, always including Cyber Jenny + Gronktayvius Red Team + Regular Jenny + Susie Franny (Red Team); Cedric adjudicates unless Codex authored the change. A missing security seat fails closed unless a logged waiver exists.
+Seat per `council.md` for the resolved tier, always including Cyber Jenny + Gronktayvius Red Team + Regular Jenny + Susie Franny (Red Team); Cedric adjudicates unless Codex authored the change. A missing or failed security seat fails closed unless a logged 24 h waiver exists per `council.md`.
+
+Susie Franny (Red Team) is required on security-sensitive and release work. If the preflight reports `muse` absent or the seat fails, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+
 Combine verdicts most-severe-wins.
 
 ```markdown

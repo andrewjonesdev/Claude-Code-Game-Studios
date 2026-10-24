@@ -6,16 +6,16 @@
     {
       "label": "UE: Build editor (Development)",
       "type": "process",
-      "command": "<UE_ROOT>/Engine/Build/BatchFiles/Build.bat",
-      "args": ["<Project>Editor", "Win64", "Development", "-Project=${workspaceFolder}/<Project>.uproject", "-WaitMutex"],
+      "command": "cmd.exe",
+      "args": ["/d", "/s", "/c", "<UE_ROOT>/Engine/Build/BatchFiles/Build.bat", "<Project>Editor", "Win64", "Development", "-Project=${workspaceFolder}/<Project>.uproject", "-WaitMutex"],
       "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "UE: Generate clang database",
       "type": "process",
-      "command": "<UE_ROOT>/Engine/Build/BatchFiles/RunUBT.bat",
-      "args": ["-mode=GenerateClangDatabase", "-project=${workspaceFolder}/<Project>.uproject", "<Project>Editor", "Win64", "Development", "-OutputDir=${workspaceFolder}"],
+      "command": "cmd.exe",
+      "args": ["/d", "/s", "/c", "<UE_ROOT>/Engine/Build/BatchFiles/RunUBT.bat", "-mode=GenerateClangDatabase", "-project=${workspaceFolder}/<Project>.uproject", "<Project>Editor", "Win64", "Development", "-OutputDir=${workspaceFolder}"],
       "problemMatcher": []
     },
     {

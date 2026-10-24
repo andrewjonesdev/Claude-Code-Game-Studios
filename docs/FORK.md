@@ -6,14 +6,18 @@
 
 - **Unreal Engine 5.8**, C# via **UnrealSharp**, C++ for engine-facing code
 - **GMCv2 + GMAS + Narrative Pro** through the **NarrativeGMC** bridge
-- **Editor MCP**: Epic's Unreal MCP and BpGenerator Ultimate (`.mcp.json`)
+- **Editor MCP**: Epic's Unreal MCP and BpGenerator Ultimate (both opt-in; example entries in `.claude/docs/templates/unreal/`)
 - **Cursor / Antigravity** as the IDE
 - **The council** — cross-family review at gates (`.claude/docs/council.md`)
 
 Fork-only files: `.claude/docs/council.md`, `.claude/scripts/council-preflight.sh`,
 `.claude/agents/ue-csharp-specialist.md`, `.claude/agents/ue-gmc-specialist.md`,
-`.mcp.json`, `.claude/docs/templates/unreal/`, `docs/engine-reference/unreal/{mcp,ide-cursor-antigravity}.md`,
+`.claude/docs/templates/unreal/` (including `mcp-unreal.example.json` and `mcp-blueprints.example.json`), `docs/engine-reference/unreal/{mcp,ide-cursor-antigravity}.md`,
 `docs/engine-reference/unreal/plugins/{unrealsharp,gmc-narrative}.md`, this file.
+
+Both editor servers are opt-in. When a task needs the editor, copy the required
+example entries into your local, gitignored config; `.mcp.json` in your local
+checkout is gitignored and is not a fork-only tracked file.
 
 ## Taking upstream releases
 

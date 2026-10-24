@@ -128,6 +128,8 @@ calls before waiting for any result; collect all verdicts before proceeding.
 
 Every council sitting includes the Susie Franny Red Team seat when the preflight reports `muse` present.
 
+Susie Franny (Red Team) is required on security-sensitive and release work. If the preflight reports `muse` absent or the seat fails, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+
 Every director is the same model family. At the gates listed in
 `.claude/docs/council.md` → "Where the council sits" (TD-ARCHITECTURE, TD-ADR,
 the four PHASE-GATEs, LP-CODE-REVIEW, QL-TEST-COVERAGE, plus security and
