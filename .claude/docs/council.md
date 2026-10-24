@@ -25,12 +25,23 @@ teammates; the second column is the tool they run on.
 | **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), adversarial-security prompt, "do not use any tool" | Security seat — not Gemini 3.5 Flash Cyber | `agy` |
 | **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
 | **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
-| **Susie Franny** | Meta Muse Spark | **Red Team** (standing, Andrew 2026-10-24) — abuse cases, trust boundaries, exploitability, prompt-injection paths | `muse exec` read-only (`--disable-write --disable-shell --disable-web-tools`), material inlined in the prompt |
+| **Susie Franny** | Meta Muse Spark | Regular reviewer; **Red Team stand-in** only when Gronktayvius (Grok) and Jenny (Gemini) are down | `muse exec` read-only (`--disable-write --disable-shell --disable-web-tools`), material inlined in the prompt |
 
 Families, for quorum: Claude, OpenAI, Google, xAI, Meta. **Two seats from one
 family count as one vote** — both Jenny roles are one Google vote, both
 Gronktayvius roles one xAI vote. Susie Franny is the Meta family and carries
 her own vote, independent of Gronktayvius Red Team (xAI).
+
+Susie Franny is a regular seat in every sitting when Grok and Gemini are up.
+Only when the preflight or a failed seat shows both unavailable, seat her as
+the Red Team stand-in with
+`council-seat run --seat SusieFranny --red-team --red-team-reason "<which seats are down>"`.
+Record the seat as **Susie Franny (Red Team stand-in)** with the reason. Her
+stand-in verdict satisfies the red-team requirement on security work and still
+counts as the Meta family vote. Her verdict is always recorded as Susie Franny
+(Meta), never relabelled as Gronktayvius (xAI) or Jenny (Google), and vice versa.
+Run her read-only with `--disable-write --disable-shell --disable-web-tools`,
+with material inlined in the prompt.
 
 If the user's machine has the fleet skills `/council-code-review` and
 `/llm-council` installed (`~/.claude/skills/`), **use them** — they carry the
@@ -59,9 +70,10 @@ YAML key `council.tier`, resolver label `council_tier`.
 
 Built first; the target structure.
 
-- Seats: Cedric, Regular Jenny, Gronktayvius General, Susie Franny (Red Team), Clahadore
-  (advisory when Claude authored). Security-sensitive work adds Cyber Jenny and
-  Gronktayvius Red Team.
+- Seats: Cedric, Regular Jenny, Gronktayvius General, Susie Franny (regular seat), Clahadore
+  (advisory when Claude authored). Security-sensitive or release work adds Cyber Jenny and
+  Gronktayvius Red Team; security-sensitive or release work uses Susie Franny as
+  Red Team stand-in when Grok and Gemini are down.
 - Chair: Cedric. When Codex authored the work, Clahadore chairs. The author
   never chairs.
 - **Quorum: 3 independent families**, the author's family excluded.
@@ -76,7 +88,7 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
 1. Run `bash .claude/scripts/council-preflight.sh`. It reports which CLIs are
    installed and which fleet skills exist. It does not decide anything.
 2. Seat every family that is present, in this order: Cedric, Regular Jenny, Susie
-   Franny (Red Team), Gronktayvius General. On security-sensitive or release work also seat Cyber Jenny and Gronktayvius Red Team (same families as Regular Jenny / Gronktayvius General: they add coverage, not votes).
+   Franny (regular seat), Gronktayvius General. On security-sensitive or release work also seat Cyber Jenny and Gronktayvius Red Team (same families as Regular Jenny / Gronktayvius General: they add coverage, not votes). Use Susie Franny as Red Team stand-in when Grok and Gemini are down.
    A seat the usage governor denies counts as absent.
 3. Chair: Cedric if seated and not the author; otherwise the strongest seated
    non-author; if no non-author seat exists,
@@ -94,7 +106,7 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
      with a logged waiver: approver, reason, gate, story/commit, ISO-8601 UTC
      expiry no more than 24 hours away. An expired or incomplete waiver fails.
 
-Susie Franny (Red Team) is required on security-sensitive and release work. The work needs a logged Susie Franny verdict (seat status `OK` in the sitting record); if there is none — preflight not run, `muse` absent, seat failed or never seated — that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+Security-sensitive and release work needs a logged Red Team verdict (seat status `OK` in the sitting record): Gronktayvius Red Team, or Susie Franny as Red Team stand-in when Grok and Gemini are down, with the reason recorded. If neither is logged, the work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away). An expired or incomplete waiver fails. Susie Franny is not independently required for every security or release sitting; she is a regular seat when Grok and Gemini are up.
 
 ### `off` — Claude directors only
 
@@ -128,8 +140,8 @@ director gate's mode check.
 | `/create-architecture` sign-off | TD-ARCHITECTURE | `/llm-council` on the architecture doc |
 | `/architecture-decision` before Accepted | TD-ADR | `/llm-council` on the ADR |
 | `/gate-check` phase transitions | CD/TD/PR/AD-PHASE-GATE | `/llm-council` on the gate packet |
-| `/security-audit`, any security-sensitive change | — | Security seats: Regular Jenny, Cyber Jenny, Gronktayvius Red Team, Susie Franny (Red Team); Cedric adjudicates (Clahadore when Codex authored the change). Security quorum: at least one Red Team family seated (xAI via Gronktayvius Red Team or Meta via Susie Franny), and at least two non-author families among the security seats and the adjudicator; Google (either Jenny) counts once, xAI (Gronktayvius Red Team) once, Meta (Susie Franny Red Team) once, and OpenAI (Cedric) once when Codex did not author the change, and Anthropic (Clahadore) once when Claude did not author the change. Either Red Team seat (Gronktayvius Red Team or Susie Franny) satisfies the red-team requirement on security work (Andrew, 2026-10-24); for provenance only, a Susie Franny verdict is always recorded as Susie Franny (Meta) and never relabelled as Gronktayvius (xAI), and vice versa |
-| `/release-checklist` | — | Full available panel **and** all security seats including Susie Franny (Red Team) |
+| `/security-audit`, any security-sensitive change | — | Security seats: Regular Jenny, Cyber Jenny, Gronktayvius Red Team; Susie Franny is a regular seat, or Susie Franny as Red Team stand-in when Grok and Gemini are down. Cedric adjudicates (Clahadore when Codex authored the change). Security quorum: at least one Red Team family seated — Gronktayvius Red Team (xAI), or Susie Franny as stand-in (Meta) when Grok and Gemini are down — plus at least two non-author families; Google counts once, xAI once, Meta once, OpenAI/Cedric once when Codex did not author, and Anthropic/Clahadore once when Claude did not author |
+| `/release-checklist` | — | Full available panel and security seats; Susie Franny is a regular seat, or Susie Franny as Red Team stand-in when Grok and Gemini are down. A logged Red Team verdict is required under the fail-closed rule above |
 
 TD-ARCHITECTURE and `/security-audit` sittings require the data-flow diagram + STRIDE table from `security-baseline.md`. [threat-modeling deck ch.1, 9, 10, 12]
 

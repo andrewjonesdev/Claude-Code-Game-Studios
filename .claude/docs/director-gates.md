@@ -126,9 +126,9 @@ calls before waiting for any result; collect all verdicts before proceeding.
 
 ### Council seats (after the mode check, beside the director)
 
-Every council sitting includes the Susie Franny Red Team seat when the preflight reports `muse` present.
+When the preflight shows Grok and Gemini down, seat Susie Franny as the Red Team stand-in with `--red-team --red-team-reason`. A failed seat may also establish unavailability. Run `council-seat run --seat SusieFranny --red-team --red-team-reason "<which seats are down>"`; label the sitting record "Susie Franny (Red Team stand-in)" with the reason.
 
-Susie Franny (Red Team) is required on security-sensitive and release work. If the preflight reports `muse` absent or the seat fails, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away), the same rule as the other security seats. An expired or incomplete waiver fails. On ordinary work her absence only degrades the sitting.
+When Grok and Gemini are up, Susie Franny (Muse, Meta family) is a regular seat in every sitting: an ordinary reviewer and the Meta family vote. When both are down, her Red Team stand-in seat satisfies the red-team requirement on security work and still counts as the Meta family vote. Security-sensitive and release work needs a logged Red Team verdict from Gronktayvius Red Team or Susie Franny as stand-in with its reason. If neither is logged, that work fails closed unless a logged waiver exists (approver, reason, gate, story/commit and ISO-8601 UTC expiry no more than 24 hours away). An expired or incomplete waiver fails. Record her verdict as Susie Franny (Meta), never as Gronktayvius (xAI) or Jenny, and vice versa. Run her read-only with `--disable-write --disable-shell --disable-web-tools`, with material inlined in the prompt.
 
 Every director is the same model family. At the gates listed in
 `.claude/docs/council.md` → "Where the council sits" (TD-ARCHITECTURE, TD-ADR,
