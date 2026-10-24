@@ -1,0 +1,21 @@
+{
+  // UNVERIFIED (2026-10-24): DotRush attach to the CoreCLR hosted inside
+  // UnrealEditor.exe. Record the result in docs/engine-reference/unreal/ide-cursor-antigravity.md.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "UnrealSharp: Attach to editor",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:dotrush.pickProcess}"
+    },
+    {
+      "name": "UE: Launch editor (lldb, C++ native)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "<UE_ROOT>/Engine/Binaries/Win64/UnrealEditor.exe",
+      "args": ["${workspaceFolder}/<Project>.uproject"],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

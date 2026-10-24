@@ -2,11 +2,11 @@
 
 | Field | Value |
 |-------|-------|
-| **Engine Version** | Unreal Engine 5.7 |
-| **Release Date** | November 2025 |
-| **Project Pinned** | 2026-03-25 |
-| **Last Docs Verified** | 2026-03-25 |
-| **Upstream reference** | Template docs now cover UE 5.8 (5.8.3, Sep 2026); this project stays pinned to 5.7 for NarrativeGMC — re-run /setup-engine when moving to 5.8. |
+| **Engine Version** | Unreal Engine 5.8 |
+| **Installed at pin time** | UE 5.8 at `C:/Program Files/Epic Games/UE_5.8` (hotfix level not probed — run `/setup-engine` §3 to record it). UE 5.7 also installed: the NarrativeGMC bridge is built on 5.7 and its 5.8 port is in progress (FLT-282), so treat 5.8 builds of the GMC stack as unverified until `plugins/gmc-narrative.md` says otherwise. |
+| **Release Date** | June 2026 (5.8.0); latest hotfix 5.8.3, September 2026 |
+| **Project Pinned** | 2026-10-24 (moved from 5.7, pinned 2026-03-25) |
+| **Last Docs Verified** | 2026-10-17 (release timeline, 5.8 release notes, and the 5.8 changes recorded in this directory); 2026-10-24 (MCP, UnrealSharp, GMC/Narrative plugin docs); 2026-02-13 (rest of directory, written against 5.7) |
 | **LLM Knowledge Cutoff** | May 2025 |
 
 ## Knowledge Gap Warning
@@ -82,22 +82,27 @@ from the same threads and from the 5.7 and 5.8 release notes (Verified Sources b
 - **Raw Input plugin (5.8)**: Deprecated in favour of the Game Input for Windows plugin
 - **`UE_LOG` (5.8)**: Still supported; Epic says it "will eventually be deprecated" and asks for `UE_LOGF`
 
-## Build Configuration (Verified)
+## Build Configuration (verified on 5.7)
 
 - **BuildSettingsVersion**: V6 (required — V5 triggers upgrade warnings about inline conformance and undefined identifiers)
 - **IncludeOrderVersion**: Latest
 - **WindowsPlatform.bStrictInlineConformance**: true (new V6 default)
 - **UndefinedIdentifierWarningLevel**: Error (new V6 default)
-- **StructUtils module**: Deprecated since 5.5 but still functional (GMCAbilitySystem depends on it)
+- **StructUtils module**: Deprecated since 5.5 but still functional on 5.7 (GMCAbilitySystem 1.3 depends on it) — confirm on 5.8 during the GMAS port
 
 ## Project Plugin Stack
 
-- **GMCv2** v2.3.7 — Fab/Marketplace (prebuilt binaries)
-- **GMCAbilitySystem** v1.3 — Source plugin, compiled locally in project Plugins/
-- **NarrativePro** — Fab/Marketplace
-- **WebUI** — Fab/Marketplace (Chromium-based web rendering)
-- **JsonLibrary** — Fab/Marketplace (JSON for Blueprint)
-- **BpGeneratorUltimate** — Fab/Marketplace (MCP Blueprint bridge)
+Versions and 5.7/5.8 build status: `plugins/gmc-narrative.md` (gameplay stack),
+`plugins/unrealsharp.md` (C#), `mcp.md` (editor MCP servers).
+
+- **GMCv2** — Fab (prebuilt binaries); 2.3.7 on 5.7, 5.8 build installed
+- **GMCAbilitySystem (GMAS)** — source plugin in project `Plugins/`; 1.3 on 5.7, 5.8 not yet built
+- **Narrative Pro** — Fab; installed for 5.7 and 5.8
+- **NarrativeGMC** — our bridge plugin (`andrewjonesdev/NarrativeGMC`)
+- **UnrealSharp** — C# scripting (MIT, pin a commit)
+- **WebUI** + **JsonLibrary** — Fab (Chromium UI, JSON for Blueprint)
+- **BpGenerator Ultimate** — Fab; serves the `unreal-blueprints` MCP server
+- **Unreal MCP** (`ModelContextProtocol`, Experimental, 5.8 only) — serves the `unreal` MCP server
 
 ## Verified Sources
 

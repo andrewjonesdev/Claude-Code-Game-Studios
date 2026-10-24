@@ -1,0 +1,14 @@
+{
+  // Cursor / Antigravity: Microsoft C# Dev Kit, vsdbg and ms-vscode.cpptools are
+  // licensed for Microsoft VS Code only. See docs/engine-reference/unreal/ide-cursor-antigravity.md
+  "recommendations": [
+    "nromanov.dotrush",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "vadimcn.vscode-lldb"
+  ],
+  "unwantedRecommendations": [
+    "ms-dotnettools.csdevkit",
+    "ms-dotnettools.csharp",
+    "ms-vscode.cpptools"
+  ]
+}

@@ -1,19 +1,29 @@
 # Claude Code Game Studios -- Game Studio Agent Architecture
 
-Indie game development managed through 49 coordinated Claude Code subagents.
+Indie game development managed through 51 coordinated Claude Code subagents.
 Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Technology Stack
 
-- **Engine**: Unreal Engine 5.7
-- **Language**: C++ (systems), Blueprint (gameplay), HTML/CSS/JS (UI via WebUI)
+- **Engine**: Unreal Engine 5.8
+- **Language**: C# via UnrealSharp (gameplay), C++ (engine-facing, GMC/GMAS), Blueprint (content), HTML/CSS/JS (UI via WebUI)
+- **Gameplay Framework**: GMCv2 + GMAS + Narrative Pro (NarrativeGMC bridge)
 - **Version Control**: Git with trunk-based development
-- **Build System**: Unreal Build Tool (UBT)
+- **Build System**: Unreal Build Tool (UBT) + .NET 10 (UnrealSharp)
 - **Asset Pipeline**: Unreal Content Pipeline + Fab Marketplace assets
+- **Editor MCP**: `unreal` (Epic Unreal MCP) + `unreal-blueprints` (BpGenerator Ultimate) — `docs/engine-reference/unreal/mcp.md`
+- **IDE**: Cursor / Antigravity — `docs/engine-reference/unreal/ide-cursor-antigravity.md`
 
-> **Active Agents**: Use Unreal specialist agents (`unreal-specialist`,
-> `ue-blueprint-specialist`, `ue-gas-specialist`, `ue-replication-specialist`,
-> `ue-umg-specialist`) for engine-specific decisions.
+> **Active Agents**: `unreal-specialist` (C++, architecture), `ue-csharp-specialist`
+> (C#), `ue-gmc-specialist` (movement, abilities, Narrative), `ue-blueprint-specialist`,
+> `ue-replication-specialist`, `ue-umg-specialist`. Not `ue-gas-specialist` — this
+> project uses GMAS, not GAS.
+
+## Council
+
+Gates also seat other model families (Codex, Gemini, Grok, Muse) per
+`.claude/docs/council.md`. `council.tier` picks `full`, `available` (default) or
+`off`; `bash .claude/scripts/council-preflight.sh` shows who is reachable.
 
 ## Project Structure
 

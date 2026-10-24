@@ -1114,6 +1114,22 @@ agents:
     last_category_result: ""
     category: engine
 
+  - name: ue-gmc-specialist
+    spec: studio-tests/agents/engine/unreal/ue-gmc-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    last_category: ""
+    last_category_result: ""
+    category: engine
+
+  - name: ue-csharp-specialist
+    spec: studio-tests/agents/engine/unreal/ue-csharp-specialist.md
+    last_spec: ""
+    last_spec_result: ""
+    last_category: ""
+    last_category_result: ""
+    category: engine
+
   - name: ue-umg-specialist
     spec: studio-tests/agents/engine/unreal/ue-umg-specialist.md
     last_spec: ""

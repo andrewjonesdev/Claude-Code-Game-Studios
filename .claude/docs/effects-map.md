@@ -117,6 +117,7 @@ The rule for deciding which side a setting belongs on:
 | Setting | Why local override makes sense |
 |---------|-------------------------------|
 | `modes.review_mode` | How much AI review you personally want |
+| `council.tier` | Which model CLIs are installed and logged in differs per machine; a laptop without Grok or Muse runs `available` while the fleet box runs `full` |
 | `modes.automation` | How often the AI prompts you |
 | `modes.automation_always_ask` | Your personal safety categories |
 | `team.size` | Which agents spawn for your reviews (review depth differs, artifacts don't) |
@@ -450,6 +451,29 @@ pipeline's own review steps run in every mode.
 - **hotfix** and **day-one-patch** are exempt — all agents always run.
 - When a gate is skipped, skills emit: `"[GATE-ID] skipped — [mode] mode."` before
   proceeding. This is consistent across all skills.
+
+---
+
+## council.tier
+
+**Controls:** Which other model families sit beside the director gates (the council)  
+**Values:** `full` | `available` | `off`  
+**Default:** `available` (applied by the reader when unset; the resolver prints `not set`)  
+**Set by:** `/settings`; per machine in `project.local.yaml` (locally overridable — CLI availability differs per machine)  
+**Read by:** Every skill that follows the director-gate invocation pattern (`.claude/docs/director-gates.md` → "Council seats"), plus `/code-review`, `/story-done`, `/security-audit`, `/release-checklist`
+
+`modes.review_mode` decides whether a gate runs; `council.tier` decides who
+besides the director reviews it. A gate `review_mode` skips gets no council.
+Exceptions that run at every `review_mode` unless the tier is `off`: the commit
+gate and security-sensitive work.
+
+| Value | Seats | Quorum | Below quorum |
+|---|---|---|---|
+| `full` | Cedric (chair), Regular Jenny, Gronktayvius General, Susie Franny, Clahadore; + Cyber Jenny and Gronktayvius Red Team on security work | 3 non-author families | Gate fails |
+| `available` | Every family the preflight finds, in order Cedric, Jenny, Susie Franny, Gronktayvius | 2 non-author families | `DEGRADED (n/2)` stamp; security and release gates fail closed (24 h waiver allowed) |
+| `off` | None — directors only (upstream behaviour) | — | — |
+
+Full contract: `.claude/docs/council.md`. Reachability: `.claude/scripts/council-preflight.sh` (observations only).
 
 ---
 
@@ -1300,7 +1324,7 @@ closing, or produces a warning and lets work continue — per test type
 
 > **Different axis from `workflow`.** `workflow` controls *what docs are required.*
 > `team.size` controls *which agents exist to make them.* A solo dev on
-> `workflow: full` still doesn't need all 49 agents — they need the same coverage
+> `workflow: full` still doesn't need all 51 agents — they need the same coverage
 > from a smaller active set.
 
 ---
@@ -1311,7 +1335,7 @@ closing, or produces a warning and lets work continue — per test type
 |-------|-----------|-------|
 | `individual` | Core 8: `producer`, `game-designer`, `gameplay-programmer`, engine-specialist (engine-driven), `technical-artist`, `sound-designer`, `qa-tester`, `writer`. **Default.** | Directors and lead-* run only on explicit invocation (e.g. via `/architecture-decision`). Specialists outside the core 8 routed through their nearest core agent. Each `team-*` skill names its own set per value, which can sit outside the core 8 (`team-release` runs `release-manager`); each skill's own `team.size` list is authoritative, and the Affected skills table below mirrors it. |
 | `small` | Core 15: directors (CD, TD, PR) + leads (LP, AD, QL, ND) + game-designer + systems-designer + engine-specialist + technical-artist + sound-designer + qa-tester + ux-designer + writer | `team-*` skills add their `small` set (below); most reach their full pipeline only at `studio`. |
-| `studio` | All 49 agents available. Engine sub-specialists (e.g. `unity-dots-specialist` separate from `unity-specialist`) routed when relevant. The adversarial review pass in `team-combat`, `team-ui` and `team-polish`. | Commercial titles, learning the full org chart, large teams with parallel work. |
+| `studio` | All 51 agents available. Engine sub-specialists (e.g. `unity-dots-specialist` separate from `unity-specialist`) routed when relevant. The adversarial review pass in `team-combat`, `team-ui` and `team-polish`. | Commercial titles, learning the full org chart, large teams with parallel work. |
 
 ---
 
@@ -1732,7 +1756,7 @@ implementation, review, and architecture validation
 |--------|--------------------------|-------------------|---------------|----------------------|
 | **Godot** | `godot-gdscript-specialist` (GDScript) or `godot-csharp-specialist` (C#) — driven by `engine.language` | `godot-shader-specialist` | `godot-specialist` | `godot-gdextension-specialist` |
 | **Unity** | `unity-specialist` | `unity-shader-specialist` | `unity-ui-specialist` | `unity-addressables-specialist`, `unity-dots-specialist` |
-| **Unreal** | `unreal-specialist` | `unreal-specialist` | `ue-umg-specialist` | `ue-gas-specialist`, `ue-blueprint-specialist`, `ue-replication-specialist` |
+| **Unreal** | `unreal-specialist` (C++), `ue-csharp-specialist` (C# via UnrealSharp) or `ue-blueprint-specialist` (Blueprint-only) — driven by `engine.language` (`"C++"` \| `"C#"` \| `"Blueprint"`) | `unreal-specialist` | `ue-umg-specialist` | `ue-gas-specialist` **or** `ue-gmc-specialist` (GMCv2 / GMAS / Narrative Pro projects — never both), `ue-blueprint-specialist`, `ue-replication-specialist` |
 | **[UNSET]** | No specialist spawned — warning emitted | No specialist spawned | No specialist spawned | None |
 
 ---

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "unreal": { "serverUrl": "http://localhost:8000/mcp" },
+    "unreal-blueprints": {
+      "command": "python",
+      "args": [
+        "C:/Users/<you>/AppData/Roaming/Claude/Claude Extensions/local.mcpb.roly-blueprintslab.unreal-engine-pro-tools/mcp_main_server.py",
+        "--server-name",
+        "unreal-handshake"
+      ]
+    }
+  }
+}

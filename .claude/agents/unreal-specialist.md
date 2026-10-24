@@ -1,7 +1,7 @@
 ---
 name: unreal-specialist
 description: "Authority on Unreal-specific patterns and APIs — guides Blueprint vs C++, UE subsystems (GAS, Enhanced Input, Niagara, etc.)."
-tools: Read, Glob, Grep, Write, Edit, Bash, Agent
+tools: Read, Glob, Grep, Write, Edit, Bash, Agent, mcp__unreal__*, mcp__unreal-blueprints__*, mcp__Unreal_Engine_Pro_Tools__*
 model: inherit
 maxTurns: 20
 ---
@@ -92,6 +92,31 @@ Before writing any code:
   Editor, its scripting or MCP tools, or a commandlet. With none available,
   write the change as editor steps for the user. A Blueprint change is done
   only when the editor has compiled it.
+
+## Unreal MCP Tools
+
+Two MCP servers can reach the running editor. Setup, ports and the full tool
+list are in `docs/engine-reference/unreal/mcp.md`.
+
+| Server | Tools | Needs |
+|---|---|---|
+| `unreal` — Epic's **Unreal MCP** (UE 5.8, Experimental) | `mcp__unreal__*` — assets, Blueprints, levels, materials, meshes via the Toolset Registry | `ModelContextProtocol` plugin enabled, server started in the open editor (`http://localhost:8000/mcp`) |
+| `unreal-blueprints` — BlueprintsLab **BpGenerator Ultimate** ("Unreal Engine Pro Tools") | `mcp__unreal-blueprints__*`, or `mcp__Unreal_Engine_Pro_Tools__*` when it comes from the Claude Desktop extension | BpGenerator Ultimate plugin enabled, editor open (TCP `localhost:9877`) |
+
+Rules:
+- **Read before you write.** Inspect (`get_asset_summary`, `list_assets_in_folder`,
+  `get_relevant_blueprint_context`, or the Unreal MCP equivalents) before creating
+  or changing anything, and quote what you found.
+- For BpGenerator Blueprint logic, call `check_request_feasibility` first, as the
+  server requires.
+- Ask before any change to a level (`spawn_*`, `set_actor_material`, deleting or
+  moving actors) or to shared assets; asset creation in a folder the user named is
+  covered by their approval of the story.
+- A change made through MCP is done only when the editor has compiled and saved
+  it and you have looked at the result (screenshot or `get_asset_summary` after
+  the change) — the run-and-observe rule applies to MCP edits too.
+- If neither server answers, say so and fall back to writing editor steps for the
+  user. Never fall back to editing `.uasset` / `.umap` bytes.
 
 ### Gameplay Ability System (GAS)
 - All combat abilities, buffs, debuffs should use GAS

@@ -70,6 +70,8 @@ session's model.
 | Agent | Subsystem | When to Use |
 | ---- | ---- | ---- |
 | `ue-gas-specialist` | Gameplay Ability System | Abilities, gameplay effects, attribute sets, tags, prediction |
+| `ue-gmc-specialist` | GMC / Narrative framework | GMCv2 predicted movement, GMAS abilities, Narrative Pro components, NarrativeGMC bridge, fork policy |
+| `ue-csharp-specialist` | UnrealSharp C# | C# gameplay via UnrealSharp, managed/native boundary, hot-reload-safe patterns |
 | `ue-blueprint-specialist` | Blueprint Architecture | BP/C++ boundary, graph standards, naming, BP optimization |
 | `ue-replication-specialist` | Networking/Replication | Property replication, RPCs, prediction, relevancy, bandwidth |
 | `ue-umg-specialist` | UMG/CommonUI | Widget hierarchy, data binding, CommonUI input, UI performance |

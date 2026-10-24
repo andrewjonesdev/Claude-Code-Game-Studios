@@ -534,6 +534,7 @@ get_effective_yaml_array() {
 # spec (effects-map.md line 145-153).
 _yaml_helper_enums="\
 modes.review_mode::full|lean|solo
+council.tier::full|available|off
 modes.rigor::minimal|standard|full
 modes.workflow::minimal|standard|full
 modes.automation::collaborative|guided|autonomous
@@ -594,6 +595,7 @@ updates.check::true|false"
 # affect what artifacts exist on disk.
 _yaml_helper_locally_overridable="\
 modes.review_mode
+council.tier
 modes.automation
 modes.automation_always_ask
 team.size
@@ -1592,7 +1594,7 @@ PYEOF
 # --keys restricts output to the named knobs. USE IT. A block of every knob
 # costs more than the resolution prose it replaces in a skill that reads 2-3
 # knobs; a block of just those knobs is the saving.
-# Valid key names are the output labels: rigor, review_mode, automation, workflow,
+# Valid key names are the output labels: rigor, review_mode, council_tier, automation, workflow,
 # docs.density, story_granularity, qa.level, team.size, project.stage,
 # automation_always_ask, engine, testing.strict, system_overrides; and, only when
 # named, the derived lines gate_level, engine_values, specialists, review_gate,
@@ -1679,6 +1681,7 @@ EOF
   fi
   for pair in modes.rigor:rigor \
               modes.review_mode:review_mode \
+              council.tier:council_tier \
               modes.automation:automation \
               modes.workflow:workflow \
               docs.density:docs.density \

@@ -21,10 +21,23 @@ Record the choice. It determines the CLAUDE.md template, naming conventions, spe
 
 ### Primary Language (Unreal)
 
-If Unreal was chosen, ask via `AskUserQuestion`: "Will most gameplay logic live in
-C++ or in Blueprints?" — `[A] C++ (Blueprints for tuning and prototyping)` /
-`[B] Blueprint-primary (C++ only where needed)`. Default to C++ if the user has no
-preference. The answer sets `engine.language` (`"C++"` or `"Blueprint"`).
+If Unreal was chosen, ask via `AskUserQuestion`: "Where will most gameplay logic
+live?" — `[A] C++ (Blueprints for tuning and prototyping)` /
+`[B] C# via UnrealSharp (C++ for engine-facing and per-frame code)` /
+`[C] Blueprint-primary (C++ only where needed)`. Default to C++ if the user has no
+preference. The answer sets `engine.language` (`"C++"`, `"C#"` or `"Blueprint"`).
+
+For `[B]`, tell the user before recording it: UnrealSharp is a third-party MIT
+plugin with no tagged releases, supports UE 5.6–5.8 on Windows and macOS only,
+needs .NET 10 and a C++ project, and its shipping-build support is undocumented
+(`docs/engine-reference/unreal/plugins/unrealsharp.md`). If the target platforms
+include Linux, mobile or console, recommend `[A]` instead.
+
+Then ask: "Which gameplay framework?" — `[1] Epic's Gameplay Ability System
+(Character Movement Component + GAS)` / `[2] GMCv2 + GMAS + Narrative Pro (via the
+NarrativeGMC bridge)`. `[2]` routes ability, movement and Narrative work to
+`ue-gmc-specialist` instead of `ue-gas-specialist`
+(`docs/engine-reference/unreal/plugins/gmc-narrative.md`).
 
 ---
 
@@ -48,12 +61,14 @@ Update the Technology Stack section, replacing the `[CHOOSE]` placeholders with 
 **For Unreal:**
 ```markdown
 - **Engine**: Unreal Engine [version]
-- **Language**: [C++ (primary), Blueprint (gameplay prototyping) | Blueprint (primary), C++ where needed]
+- **Language**: [C++ (primary), Blueprint (gameplay prototyping) | C# via UnrealSharp (gameplay), C++ (engine-facing), Blueprint (content) | Blueprint (primary), C++ where needed]
 - **Build System**: Unreal Build Tool (UBT)
 - **Asset Pipeline**: Unreal Content Pipeline
 ```
 The Language line follows the primary-language answer above: the first form for
-`[A]` (`engine.language: "C++"`), the second for `[B]` (`"Blueprint"`).
+`[A]` (`engine.language: "C++"`), the second for `[B]` (`"C#"`), the third for
+`[C]` (`"Blueprint"`). With framework `[2]`, add a line
+`- **Gameplay Framework**: GMCv2 + GMAS + Narrative Pro (NarrativeGMC bridge)`.
 
 ### Engine reference import
 

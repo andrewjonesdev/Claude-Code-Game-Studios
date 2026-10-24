@@ -1,0 +1,27 @@
+{
+  // Builds run hidden with node reuse off (fleet headless-console rule).
+  "version": "2.0.0",
+  "options": { "env": { "MSBUILDDISABLENODEREUSE": "1", "DOTNET_NOLOGO": "1", "DOTNET_CLI_TELEMETRY_OPTOUT": "1" } },
+  "tasks": [
+    {
+      "label": "UE: Build editor (Development)",
+      "type": "shell",
+      "command": "& '<UE_ROOT>/Engine/Build/BatchFiles/Build.bat' <Project>Editor Win64 Development -Project='${workspaceFolder}/<Project>.uproject' -WaitMutex",
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "UE: Generate clang database",
+      "type": "shell",
+      "command": "& '<UE_ROOT>/Engine/Build/BatchFiles/RunUBT.bat' -mode=GenerateClangDatabase -project='${workspaceFolder}/<Project>.uproject' <Project>Editor Win64 Development -OutputDir='${workspaceFolder}'",
+      "problemMatcher": []
+    },
+    {
+      "label": "UnrealSharp: Build managed",
+      "type": "shell",
+      "command": "dotnet build '${workspaceFolder}/<ScriptDirName>/<ManagedProjectName>.sln' -c Debug",
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

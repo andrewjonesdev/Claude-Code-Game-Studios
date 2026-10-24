@@ -91,6 +91,24 @@ engine's word.
 
 ---
 
+## Project Stack — Third-Party (Detailed Docs Available)
+
+### ✅ GMCv2, GMAS, Narrative Pro, NarrativeGMC
+- Predicted movement (GMCv2), abilities on GMC's move loop (GMAS), quests/dialogue/inventory (Narrative Pro), our bridge joining them (NarrativeGMC)
+- Owner agent: `ue-gmc-specialist`
+- **Detailed docs:** `plugins/gmc-narrative.md` (versions, 5.7/5.8 build status, fork policy)
+
+### ✅ UnrealSharp (C# scripting)
+- C# classes as reflected UClasses, hot reload on save, UE 5.6–5.8, .NET 10, Windows/macOS
+- Owner agent: `ue-csharp-specialist`
+- **Detailed docs:** `plugins/unrealsharp.md`; IDE setup in `ide-cursor-antigravity.md`
+
+### ✅ Editor MCP servers
+- `unreal` (Epic Unreal MCP, 5.8) and `unreal-blueprints` (BpGenerator Ultimate)
+- **Detailed docs:** `mcp.md`
+
+---
+
 ## Other Plugins (Brief Overview)
 
 ### 🟡 Mass Entity
@@ -179,6 +197,7 @@ engine's word.
 - **Purpose:** Lets agentic AI systems connect to the Unreal Editor to understand the engine and project and help build assets or systems
 - **Status:** Experimental
 - **Official:** UE 5.8 release notes, *MCP Server (Experimental)*
+- **Project setup:** `mcp.md` — plugin `ModelContextProtocol` ("Unreal MCP"), `http://localhost:8000/mcp`, server off until started
 
 ---
 

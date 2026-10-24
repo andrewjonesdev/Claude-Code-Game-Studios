@@ -137,10 +137,10 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 ```markdown
 ## Engine Specialists
 - **Primary**: unreal-specialist
-- **Language/Code Specialist**: ue-blueprint-specialist (Blueprint graphs) or unreal-specialist (C++)
+- **Language/Code Specialist**: unreal-specialist (C++), ue-csharp-specialist (C# via UnrealSharp) or ue-blueprint-specialist (Blueprint-primary)
 - **Shader Specialist**: unreal-specialist (no dedicated shader specialist — primary covers materials)
 - **UI Specialist**: ue-umg-specialist (UMG widgets, CommonUI, input routing, widget styling)
-- **Additional Specialists**: ue-gas-specialist (Gameplay Ability System, attributes, gameplay effects), ue-replication-specialist (property replication, RPCs, client prediction, netcode)
+- **Additional Specialists**: ue-gas-specialist (Gameplay Ability System, attributes, gameplay effects) — **or**, on the GMCv2 / GMAS / Narrative Pro stack, ue-gmc-specialist (predicted movement, GMAS abilities, Narrative components, NarrativeGMC bridge); ue-replication-specialist (property replication, RPCs, client prediction, netcode)
 - **Routing Notes**: Invoke primary for C++ architecture and broad engine decisions. Invoke Blueprint specialist for Blueprint graph architecture and BP/C++ boundary design. Invoke GAS specialist for all ability and attribute code. Invoke replication specialist for any multiplayer or networked systems. Invoke UMG specialist for all UI implementation.
 
 ### File Extension Routing
@@ -148,6 +148,8 @@ Also populate the `## Engine Specialists` section in `technical-preferences.md` 
 | File Extension / Type | Specialist to Spawn |
 |-----------------------|---------------------|
 | Game code (.cpp, .h files) | unreal-specialist |
+| C# game code (.cs under the UnrealSharp script directory) | ue-csharp-specialist |
+| Movement / ability / Narrative code on the GMC stack | ue-gmc-specialist |
 | Shader / material files (.usf, .ush, Material assets) | unreal-specialist |
 | UI / screen files (.umg, UMG Widget Blueprints) | ue-umg-specialist |
 | Scene / prefab / level files (.umap, .uasset) | unreal-specialist |

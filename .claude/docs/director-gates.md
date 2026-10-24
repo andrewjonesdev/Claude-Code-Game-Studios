@@ -124,6 +124,26 @@ For parallel spawning (multiple directors at one gate point): apply the mode
 check per gate, then spawn all surviving agents simultaneously — issue all `Agent`
 calls before waiting for any result; collect all verdicts before proceeding.
 
+### Council seats (after the mode check, beside the director)
+
+Every director is the same model family. At the gates listed in
+`.claude/docs/council.md` → "Where the council sits" (TD-ARCHITECTURE, TD-ADR,
+the four PHASE-GATEs, LP-CODE-REVIEW, QL-TEST-COVERAGE, plus security and
+release work), a gate that survives the mode check **also** convenes the council:
+
+1. Resolve `council_tier` (`resolve_config --keys review_mode,council_tier`).
+   Unset means `available`; `off` means skip this subsection.
+2. Run `bash .claude/scripts/council-preflight.sh` and seat per `council.md` for
+   that tier. Prefer the fleet skills `/council-code-review` (diffs) and
+   `/llm-council` (documents) when the preflight reports them present.
+3. Run the council **in parallel with** the director, not after it.
+4. Combine: most severe verdict wins; an evidence-backed High/Critical from any
+   seat fails the gate; below quorum the verdict is stamped
+   `DEGRADED (n/m families)`, and security/release gates fail closed.
+5. Record the sitting in `production/council/` per `council.md` → "Recording".
+
+Note: `[GATE-ID] council — <tier>, <n> families, <verdict>` beside the director's verdict.
+
 ---
 
 ## Standard Verdict Format
