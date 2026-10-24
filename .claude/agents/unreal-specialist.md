@@ -122,6 +122,8 @@ Rules:
 
 ### Gameplay Ability System (GAS)
 - **Projects on the GMCv2 / GMAS / Narrative Pro stack do not use GAS** — abilities, effects and attributes are GMAS; defer to **ue-gmc-specialist** (check technical-preferences.md → Gameplay Framework).
+
+On GAS projects (not the GMC stack):
 - All combat abilities, buffs, debuffs should use GAS
 - Gameplay Effects for stat modification — never modify stats directly
 - Gameplay Tags for state identification — prefer tags over booleans

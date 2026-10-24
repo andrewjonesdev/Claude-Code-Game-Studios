@@ -25,7 +25,7 @@ option (`engine.language: "C#"`), routed to `ue-csharp-specialist`.
 | Project type | C++ project strongly recommended; Blueprint-only works but is harder to support | README |
 | License | MIT | repo |
 | Releases | None tagged. Commits land daily. | GitHub releases page |
-| Packaging / shipping | Unverified upstream; a spike built and packaged on UE 5.8 on DESKTOP-D249KD4 (2026-10-24) — record its commit when known | — |
+| Packaging / shipping | reported by session WT-9561 (receipt not attached here): a spike built and packaged on UE 5.8 on DESKTOP-D249KD4 (2026-10-24) — unverified until its commit and log are recorded | — |
 
 **Pinned commit:** not yet recorded. When UnrealSharp is added to a project, record the exact upstream SHA and date here and in the project's submodule; never track `main`.
 

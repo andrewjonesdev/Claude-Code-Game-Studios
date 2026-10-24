@@ -131,9 +131,9 @@ Every director is the same model family. At the gates listed in
 the four PHASE-GATEs, LP-CODE-REVIEW, QL-TEST-COVERAGE, plus security and
 release work), a gate that survives the mode check **also** convenes the council:
 
-1. Resolve `council_tier` (`resolve_config --keys review_mode,council_tier`).
-   Unset means `available`; `off` means skip this subsection.
-   Exception: the commit gate and security-sensitive work convene the council even when this mode check skipped the director (see `council.md`).
+1. Resolve `council_tier` (`resolve_config --keys review_mode,council_tier`; YAML key `council.tier`, resolver label `council_tier`).
+   Unset means `available`. `off` means no council anywhere, including the commit gate and security work.
+   Exception: When the tier is not `off`, the commit gate and security-sensitive work convene the council even when this mode check skipped the director (see `council.md`).
 2. Run `bash .claude/scripts/council-preflight.sh` and seat per `council.md` for
    that tier. Prefer the fleet skills `/council-code-review` (diffs) and
    `/llm-council` (documents) when the preflight reports them present.

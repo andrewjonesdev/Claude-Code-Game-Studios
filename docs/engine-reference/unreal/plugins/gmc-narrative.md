@@ -1,12 +1,11 @@
 # Unreal Engine 5.8 — GMCv2, GMAS, Narrative Pro and NarrativeGMC
 
-**Last verified:** 2026-10-24 (installed engine Marketplace folders and the NarrativeGMC repo; 5.8 build of the stack **not yet done**)
+**Last verified:** 2026-10-24 (builds on DESKTOP-D249KD4)
 **Status:** Project gameplay framework. Owner agent: `ue-gmc-specialist`.
 
-> The project moved its pin to UE 5.8 on 2026-10-24 and is porting the
-> NarrativeGMC bridge concurrently. Until the port lands, **5.7 is the only
-> engine this stack has been built on**. The table below says which
-> combinations are verified.
+> The project moved its pin to UE 5.8 on 2026-10-24. The NarrativeGMC bridge
+> builds on both 5.7.4 and 5.8.3, pending merge of NarrativeGMC PR #1.
+> The table below records the verified combinations.
 
 ---
 
@@ -15,7 +14,7 @@
 | Layer | Vendor / source | Fork? | Notes |
 |---|---|---|---|
 | **GMCv2** — predicted, replicated movement on `APawn` | GRIMTEC, Fab (prebuilt binaries) | **Never** — Fab EULA | Installed for 5.7 and 5.8 (`Engine/Plugins/Marketplace/GMCv2Adv…`) |
-| **GMAS** (GMCAbilitySystem) — abilities, attributes, effects on GMC's move loop | reznok/GMCAbilitySystem, source | Only if we must carry a patch upstream won't take | Source plugin in project `Plugins/`. Upstream 1.4.x (Oct 2026, unverified). **No 5.8 install yet.** |
+| **GMAS** (GMCAbilitySystem) — abilities, attributes, effects on GMC's move loop | reznok/GMCAbilitySystem, source | Only if we must carry a patch upstream won't take | Pinned to upstream tag v1.4.1; 5.7 and 5.8 build verified |
 | **Narrative Pro** — quests, dialogue, inventory, equipment, interaction | Narrative Tools, Fab | **Never** — Fab EULA | Installed for 5.7 and 5.8. Natively `ACharacter` + GAS; no official GMC support found (2026-10-24). |
 | **NarrativeGMC** — our bridge | `andrewjonesdev/NarrativeGMC` | It is ours | Re-parents Narrative onto `AGMAS_Pawn`, ports GAS abilities to GMAS, vendors GMCExtended (Rooibot, MIT) and GMC-ALS patterns (Dixon6) |
 
@@ -27,10 +26,18 @@ a patch forces it" — see `ue-gmc-specialist` → Forking Policy.
 
 | Engine | GMCv2 | GMAS | Narrative Pro | NarrativeGMC | Status |
 |---|---|---|---|---|---|
-| 5.7 | 2.3.7 | 1.3 | 2.2.6+ | 0.1.0 (master, 2026-03-25) + WT-9561 audit fixes | Built (host project `NGMCHost`) |
-| 5.8 | 2.3.9 installed | not installed | 2.4.2 installed | port in progress (FLT-282) | **Unverified** |
+| 5.7.4 | 2.3.7 | 1.4.1 (tag v1.4.1, 0e91584, unmodified) | 2.2.6 | PR #1 branch | Build Succeeded, 0 errors (DESKTOP-D249KD4) |
+| 5.8.3 | 2.3.9 | 1.4.1 (same tag, unmodified) | 2.4.2 | PR #1 branch | Clean rebuild 150 actions, 0 errors, 132 s; `NarrativeGMCPlayerPawn` spawned with `NarrativeGMCPlayerController` under `-game -RenderOffScreen` (DESKTOP-D249KD4) |
 
-Build hosts: DESKTOP-D249KD4 (gaming) has UE 5.7.4 and 5.8.3 at `A:\Epic Games\` with the Fab plugins; greatroom has 5.5–5.8. An UnrealSharp spike built and packaged on 5.8 on the gaming PC (2026-10-24).
+Build receipts: session WT-d340, [NarrativeGMC PR #1](https://github.com/andrewjonesdev/NarrativeGMC/pull/1), branch `wt/WT-d340/FLT-282-ue58`; details in that repo's `docs/ue58-port.md`.
+
+- GMAS 1.3 is no longer supported (1.4 removed `PreRemoteMoveExecution` and the legacy `ApplyAbilityEffect` overload).
+- StructUtils is deprecated but still ships in 5.7 and 5.8; GMAS 1.4.1 builds against it unpatched. **No GMAS fork needed — pin the upstream tag.**
+- 5.8 engine break hit: the 2-arg `UAnimSequence::ExtractRootMotionFromRange` was removed (use `FAnimExtractContext`); `FPoseSearchQueryTrajectory` is still only deprecated on 5.8.
+- Narrative Pro (2.2.6 and 2.4.2): using `ANarrativeGameState` directly from C++ asserts in LoadMap (`GetActorGUID` not implemented) — use `ANarrativeGMCGameState`.
+- Build host: DESKTOP-D249KD4, UE at `A:\Epic Games\`, VS2022 BuildTools 14.44, hidden via `tools/Build-NGMCHost.ps1`.
+
+Status: verified pending merge of NarrativeGMC PR #1.
 
 Update this table from build receipts only.
 
@@ -54,8 +61,8 @@ retargeter assets, then verify in-editor.
 
 ## 5.8 port checklist (tracked in FLT-282)
 
-- C++20 minimum — drop any `CppStandardVersion.Cpp17` in `.Build.cs` / `.Target.cs`
-- Removed deprecated animation / Control Rig / Live Link symbols (GMC-ALS code is most exposed)
+- [x] C++20 minimum — verified by the 5.8.3 clean rebuild (150 actions, 0 errors).
+- [x] Animation port — replaced the removed 2-arg `UAnimSequence::ExtractRootMotionFromRange` with `FAnimExtractContext`; `FPoseSearchQueryTrajectory` remains deprecated on 5.8.
 - PhysicsMover removed from Mover — irrelevant unless something pulled Mover in
 - Narrative Pro 2.4 / 3.x API changes — diff the 5.8 install's headers against 5.7
-- GMAS on 5.8 — build upstream first, then decide fork vs no fork
+- [x] GMAS on 5.8 — upstream tag v1.4.1 (0e91584) builds unmodified on 5.7.4 and 5.8.3, including its deprecated StructUtils dependency; no fork needed.

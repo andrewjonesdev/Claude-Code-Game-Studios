@@ -12,7 +12,7 @@
 #
 # Output:
 #   tier: <full|available|off|unset> (<source>)
-#   seat: <teammate> family=<family> cli=<name> status=<present|absent> [version=...]
+#   seat: <teammate> family=<family> cli=<name> status=<present|absent> [path=...] [version=...]
 #   skill: <name> status=<present|absent>
 #   families_present: <n> (<list>)
 
@@ -24,15 +24,14 @@ root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 tier_line=$(bash "$root/.claude/hooks/yaml-helper.sh" resolve_config --keys council_tier 2>/dev/null | grep '^council_tier:' || true)
 echo "tier: ${tier_line#council_tier: }"
 
-grok_cli=grok
-if command -v grok >/dev/null 2>&1; then
-  grok_exe=grok
-elif [ -n "${COUNCIL_GROK_EXE:-}" ]; then
+grok_cli=grok-exec
+if [ -n "${COUNCIL_GROK_EXE:-}" ] && { command -v "$COUNCIL_GROK_EXE" >/dev/null 2>&1 || [ -f "$COUNCIL_GROK_EXE" ]; }; then
   grok_exe="$COUNCIL_GROK_EXE"
-  grok_cli="$grok_exe"
+elif command -v grok >/dev/null 2>&1; then
+  grok_exe=grok
+  grok_cli=grok
 else
   grok_exe="$HOME/source/repos/usage-governor/publish/UsageGovernor.exe"
-  grok_cli="$grok_exe"
 fi
 # Muse Code installs a .cmd launcher outside PATH on Windows.
 muse_cli=muse
@@ -43,7 +42,8 @@ fi
 
 families=""
 seat() {  # teammate family cli-name probe
-  local who="$1" fam="$2" cli="$3" probe="$4" status=absent ver=""
+  local who="$1" fam="$2" cli="$3" probe="$4" status=absent ver="" path=""
+  case "$probe" in */*|*\\*) path=" path=$probe" ;; esac
   if [ -n "$probe" ] && { command -v "$probe" >/dev/null 2>&1 || [ -f "$probe" ]; }; then
     status=present
     case " $families " in *" $fam "*) ;; *) families="$families $fam" ;; esac
@@ -52,7 +52,7 @@ seat() {  # teammate family cli-name probe
       [ -n "$ver" ] && ver=" version=$ver"
     fi
   fi
-  echo "seat: $who family=$fam cli=$cli status=$status$ver"
+  echo "seat: $who family=$fam cli=$cli status=$status$path$ver"
 }
 
 seat "Clahadore"            claude  claude-code  "claude"

@@ -21,8 +21,8 @@ teammates; the second column is the tool they run on.
 |---|---|---|---|
 | **Clahadore** | Claude (this session) | Implementer; council seat (advisory-only when Claude wrote the work) | — |
 | **Cedric** | Codex / ChatGPT (`gpt-5.6-sol`, reasoning high) | Chair (synthesis) + seat | `codex exec` |
-| **Regular Jenny** | Gemini 3.1 Pro, high | Correctness / design / regression | `agy` |
-| **Cyber Jenny** | Gemini 3.6 Flash, high, adversarial-security prompt | Security seat — **not** Gemini 3.5 Flash Cyber | `agy` |
+| **Regular Jenny** | Gemini 4 Argon High (`gemini-4-argon-high`) | Correctness / design / regression | `agy` |
+| **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), adversarial-security prompt, "do not use any tool" | Security seat — **not** Gemini 3.5 Flash Cyber | `agy` |
 | **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
 | **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
 | **Susie Franny** | Meta Muse Spark | Seat (probation) | `muse exec` |
@@ -39,16 +39,20 @@ absent.
 
 ### Author family
 
-The author family is the model family that wrote the change under review, taken
-from the commit's `Co-Authored-By` lines and the PR body's authorship line. When
-work is mixed, every contributing family is an author family. When unknown,
-treat Claude as the author (this session's family).
+The author family is the model family that wrote the change under review. Read
+the git commit `Author` and every `Co-Authored-By` line plus the PR authorship
+line. Map model names to families: Claude/Clahadore → Claude;
+Codex/ChatGPT/GPT/Cedric → OpenAI; Gemini/Jenny/agy → Google;
+Grok/Gronktayvius → xAI; Muse/Susie Franny → Meta. When work is mixed, every
+contributing family is an author family. A human-only author line maps to no
+family; if no model family is identifiable, treat Claude as the author.
 
 ## Tiers — `council.tier`
 
 One setting, in `project.yaml` or (per machine) `project.local.yaml`. Values:
 `full` | `available` | `off`. **Unset means `available`.** Resolve it with
 `bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier`.
+YAML key `council.tier`, resolver label `council_tier`.
 
 ### `full` — the whole council
 
@@ -71,15 +75,17 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
 1. Run `bash .claude/scripts/council-preflight.sh`. It reports which CLIs are
    installed and which fleet skills exist. It does not decide anything.
 2. Seat every family that is present, in this order: Cedric, Regular Jenny, Susie
-   Franny, Gronktayvius General. A seat the usage governor denies counts as absent.
+   Franny, Gronktayvius General. On security-sensitive or release work also seat Cyber Jenny and Gronktayvius Red Team (same families as Regular Jenny / Gronktayvius General: they add coverage, not votes).
+   A seat the usage governor denies counts as absent.
 3. Chair: Cedric if seated and not the author; otherwise the strongest seated
    non-author; if no non-author seat exists,
    there is no chair and the gate fails.
 4. **Quorum: 2 independent non-author families.** Claude counts only when it
    did not author the work.
-5. Below quorum:
-   - Ordinary gates may proceed **only when n ≥ 1** (at least one non-author
-     family seated and producing findings); with **n = 0 the gate fails**.
+5. n = number of non-author families with at least one seated seat. Quorum is
+   met at n ≥ 2. Below quorum:
+   - Ordinary gates may proceed **only when n = 1** (one non-author family
+     seated and producing findings); with **n = 0 the gate fails**.
      The verdict is stamped **`DEGRADED (n/2 families)`**
      with the missing seats named. A degraded PASS is reported as degraded, never
      as a plain PASS.
@@ -119,7 +125,7 @@ director gate's mode check.
 | `/create-architecture` sign-off | TD-ARCHITECTURE | `/llm-council` on the architecture doc |
 | `/architecture-decision` before Accepted | TD-ADR | `/llm-council` on the ADR |
 | `/gate-check` phase transitions | CD/TD/PR/AD-PHASE-GATE | `/llm-council` on the gate packet |
-| `/security-audit`, any security-sensitive change | — | Security seats (Cyber Jenny + Gronktayvius Red Team + Regular Jenny, Cedric adjudicates) |
+| `/security-audit`, any security-sensitive change | — | Security seats (Cyber Jenny + Gronktayvius Red Team + Regular Jenny, Cedric adjudicates). Cyber Jenny + Regular Jenny count as one Google vote, so security quorum needs Google plus at least one other non-author family (OpenAI via Cedric, or xAI via Gronktayvius Red Team) |
 | `/release-checklist` | — | Full available panel **and** both security seats |
 
 Security-sensitive means: auth, crypto, secrets, permissions, input validation,
@@ -156,8 +162,4 @@ A seat that produced no tokens is `FAILED`, never "no objections".
 - Run a seat with the live working tree as its writable cwd (the fleet skills
   use a disposable checkout; do the same by hand)
 - Send secrets, credentials, `.env` files or real player data to any seat
-- Send any diff or document before scanning it for secrets: run
-  `gitleaks detect --no-git --source <file>` when installed; otherwise grep for
-  private keys, `AKIA`, `ghp_`, `sk-`, `xox`, `password=`, and `.env` content.
-  Exclude `.env*`, `*.pem`, `*.key`, and `project.local.yaml` from seat packets.
-  A hit stops the sitting until the secret is removed.
+- Send any diff or document to a seat before it has passed the secret scan in step 0

@@ -3,7 +3,7 @@ name: code-review
 description: "Architectural code review — coding standards, SOLID, testability, performance concerns."
 argument-hint: "[path-to-file-or-directory]"
 user-invocable: true
-allowed-tools: Read, Glob, Grep, Bash(git log *), Agent, AskUserQuestion, Bash(bash "*/.claude/skills/code-review/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash .claude/scripts/council-preflight.sh), Bash(bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier)
+allowed-tools: Skill, Read, Glob, Grep, Bash(git log *), Agent, AskUserQuestion, Bash(bash "*/.claude/skills/code-review/../../hooks/yaml-helper.sh" resolve_config *), Bash(bash "*/.claude/skills/code-review/../../scripts/council-preflight.sh")
 model: sonnet
 ---
 
@@ -200,9 +200,10 @@ Collect all specialist findings before producing output.
 
 ### Council review
 
-Resolve `council_tier` with `bash .claude/hooks/yaml-helper.sh resolve_config --keys council_tier` (unset = `available`, `off` = skip).
-Run `bash .claude/scripts/council-preflight.sh`; convene per `.claude/docs/council.md`.
+Resolve `council_tier` with `bash "${CLAUDE_SKILL_DIR}/../../hooks/yaml-helper.sh" resolve_config --keys council_tier` (unset = `available`, `off` = skip (no council anywhere)).
+Run `bash "${CLAUDE_SKILL_DIR}/../../scripts/council-preflight.sh"`; convene per `.claude/docs/council.md`.
 Prefer the `/council-code-review` fleet skill for diffs.
+Security-sensitive diffs seat the security seats per `council.md`.
 Convene on the reviewed diff; combine council and review verdicts most-severe-wins.
 
 ```
