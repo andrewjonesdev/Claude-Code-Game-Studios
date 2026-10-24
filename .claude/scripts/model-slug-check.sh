@@ -18,7 +18,7 @@ set -u
 root=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 cd "$root" || exit 0
 total=0
-pattern='gemini-3\.(1-pro|5-flash|6-flash|7-flash)|Gemini 3\.(1 Pro|6 Flash|7 Flash)'
+pattern='gemini-3\.(1-pro|5-flash|6-flash|7-flash)|Gemini 3\.(1 Pro|5 Flash|6 Flash|7 Flash)'
 while IFS= read -r -d '' path; do
   case "$path" in
     CHANGELOG.md|*/CHANGELOG.md|studio-tests/*|.claude/scripts/model-slug-check.sh) continue ;;

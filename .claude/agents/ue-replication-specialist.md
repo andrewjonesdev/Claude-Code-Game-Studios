@@ -85,7 +85,7 @@ On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authori
 - Never replicate derived/computed values — compute them client-side from replicated inputs
 - On non-GMC projects: use `FRepMovement` for character movement, not custom position replication
 - No `BlueprintReadWrite` or client-callable C#/Blueprint mutators on authoritative PlayerState, faction, team or inventory properties; server-only mutators are gated by `HasAuthority()`. [NarrativeGMC audit 2026-10-24]
-- Treat `COND_OwnerOnly`, `bOnlyRelevantToOwner` and relevancy culling as confidentiality controls as well as bandwidth controls; hidden loot, distant enemies and private tokens must not reach all clients. [threat-modeling deck ch.5]
+- `COND_OwnerOnly`, `bOnlyRelevantToOwner` and relevancy decide what each client receives — use them to keep hidden loot, enemy positions and private tokens off other clients, but they are necessary, not sufficient: the same data must not also be exposed through another replicated property, RPC or GameState. [threat-modeling deck ch.5]
 
 ### RPC Design
 - `Server` RPCs: client requests an action, server validates and executes
@@ -136,7 +136,7 @@ On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authori
 - Never trust client-reported positions, damage, or state changes without validation
 - Log suspicious replication patterns for anti-cheat analysis
 - Use checksums for critical replicated data where feasible
-- Custom `NetSerialize` bounds array counts and bit-reader lengths before allocating; use `if (ensure(...))` rather than `check`/`checkf` on network input so malformed packets cannot crash Shipping servers. [NarrativeGMC audit; threat-modeling deck ch.6]
+- Custom `NetSerialize` and RPC handlers bound array counts and bit-reader lengths before allocating, and handle malformed input with explicit validation that rejects and logs (rate-limited) — never `check`, `checkf` or `ensure` on network input: `check` is compiled out of Shipping, and `ensure` traps and spams logs in Development. [NarrativeGMC audit; threat-modeling deck ch.6]
 
 ### Common Replication Anti-Patterns
 - Replicating cosmetic state that could be derived client-side

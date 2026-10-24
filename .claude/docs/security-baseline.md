@@ -14,22 +14,24 @@ Adapted from the studio-wide baseline on Jira FLT-281 (items 1–40, 2026-10-24)
 
 ## Safe by construction
 
-- If a surface must not do something, delete the capability instead of switching it off. Editor MCP servers (`docs/engine-reference/unreal/mcp.md`) are off unless a task needs them — Epic's Unreal MCP keeps `bAutoStartServer=False`; start it per task and stop it after. [9]
+- If a surface must not do something, delete the capability instead of switching it off. Editor MCP servers (`docs/engine-reference/unreal/mcp.md`) are off unless a task needs them — Epic Unreal MCP (HTTP 8000) keeps `bAutoStartServer=False`; start it per task and stop it after. BpGenerator Ultimate (TCP 9877) is unauthenticated and its bind is not configurable: enable the BpGenerator plugin only in editor sessions that need it and close the editor/disable the plugin afterwards. [9]
 - Put each control on the process that makes the request: the dedicated server validates every client RPC; never trust the client. Editor-side MCP limits belong in the editor plugin config, not only in agent instructions. [10]
 - Presence is not reachability: an MCP server, build host or plugin listed somewhere is not working until a real call/build succeeds. [29]
-- Editor MCP servers bind only to localhost (`127.0.0.1`), default off and start per task; validate `Origin`/`Host` and allow-list exposed tools/tokens where supported. MCP/editor plugins never ship in packaged builds (editor-only `TargetAllowList`). [websec: CORS, CSRF, Host header]
+- Bind editor MCP servers to localhost (`127.0.0.1`) where configurable; validate `Origin`/`Host` and allow-list exposed tools/tokens where supported. Editor/MCP plugins use `Type: Editor` modules and are excluded from game targets; `/release-checklist` confirms the staged build contains no MCP/BpGenerator binaries. [websec: CORS, CSRF, Host header]
 - A player-hosted co-op listen server is untrusted for persistent progression, currency and cross-session inventory; a dedicated server or backend validates persistent state. [threat-modeling deck ch.2, 3, 9]
-- When online lands, verify Steam/EOS tickets server-side in `PreLogin`, bind RPCs to `UniqueNetId`, rotate session tokens and authorize lobby/squad invites (no IDOR). [websec: Authentication, Access control]
+- When online lands, verify Steam/EOS auth tickets asynchronously on the server (online-subsystem/EOS Connect verification) before granting the player any authority — hold the connection in a limited state, kick on failure or timeout; bind RPCs to the verified `UniqueNetId`. Use PKCE, `state` and `nonce` for any OAuth/OpenID login flow. Rotate session tokens and authorize lobby/squad invites (no IDOR). [websec: Authentication, Access control] [FLT-281 41]
+- Bulkheads and budgets: server tick work, AI/pathfinding, async jobs, save/mod parsing and WebUI bridge calls each have a size/time budget and an isolated queue, so one flood cannot starve the rest; reject or defer when over budget. [FLT-281 53]
 
 ## Content and data
 
+- Explicit DTOs only — never bind incoming data (RPC params, WebUI messages, save/mod files) straight onto engine objects (mass assignment). [FLT-281 46]
 - Save files, config files, mods and any downloaded content are untrusted input: validate sizes and versions, no path traversal from file contents, no code execution from data. [21]
 - WebUI (in-engine Chromium) pages: ship local HTML only, strict CSP (`script-src 'self'`, no inline handlers), no remote script, allowlist any embedded URLs, sanitize any player-provided text before it reaches the page. [11][12][13]
 - Telemetry/analytics properties are a closed set: no free text, player names, chat or IDs beyond a pseudonymous ID; errors map to codes. [16]
 - Minors and online play: when co-op/online/chat lands, plan age rating (ESRB/PEGI/IARC), report/block, and safe defaults. [17]
 - If anything ships an overlay or injects into other processes, check anti-cheat and overlay platform terms first (FLT-281 gamer council). [overlay]
 - The Chromium↔UE/C# WebUI bridge exposes only a narrow allow-listed DTO API, never raw UObject reflection or console commands; validate `postMessage` origin/source and JSON schema. CSP includes `frame-ancestors 'none'` and `require-trusted-types-for 'script'`. [websec: DOM-based, Clickjacking]
-- Save/mod parsing bounds bytes before buffering, caps archive entries and decompression ratio, forbids polymorphic type instantiation from data, enforces schema depth/value ranges and disables XML DTDs; fuzz custom parsers in CI. [websec: File upload, Insecure deserialization, XXE]
+- Save/mod parsing bounds bytes before buffering, caps archive entries and decompression ratio, forbids polymorphic type instantiation from data, enforces schema depth/value ranges and disables XML DTDs/external entities; fuzz custom parsers in CI. [websec: File upload, Insecure deserialization, XXE] [FLT-281 48]
 - Save/mod storage uses engine-generated IDs instead of user filenames; canonicalize paths with trailing-separator checks, reject symlinks/junctions and TOCTOU races, and quarantine/scan UGC before mounting. [websec: File upload, Directory traversal]
 - Backend or WebUI WebSockets use `wss://`, authenticated handshakes, a strict Origin allow-list, maximum payload sizes before parsing and rate limits; enforce per-message session/room authorization and expiring, revocable access. [websec: WebSockets]
 - Audit auth, RPC rejections, economy/save changes and MCP calls with `UniqueNetId`, action, time and result in an append-only server store that survives `USE_LOGGING_IN_SHIPPING=0`. [threat-modeling deck ch.4 Repudiation]
@@ -38,12 +40,12 @@ Adapted from the studio-wide baseline on Jira FLT-281 (items 1–40, 2026-10-24)
 
 - Shipped game builds, launchers and tools are code-signed, with a signed update channel. [22]
 - Secrets (Steam/EOS keys, signing certs, store tokens, API keys) live in a secret manager, never in the repo or `project.yaml`; rotation is scripted and single-writer. [24][35]
-- Installer/packaging tests that install, uninstall or overwrite run only on disposable VMs or peer PCs, never on a working install. [36]
+- Installer/packaging tests that install, uninstall or overwrite run only on disposable VMs or a peer PC dedicated to destructive tests (snapshotted), never on a working install or a shared build host. [36]
 - No local-only dependencies in cloud builds: CI must not reference a developer's engine path (e.g. `A:\Epic Games\…`), local models or unpinned plugin checkouts; pin plugins (GMAS tag, UnrealSharp commit). [34]
 - Third-party "draft"/preview hosting is public: never upload Fab plugin binaries, unreleased builds or licensed assets to third-party hosts; internal artifacts stay in private storage. [32]
 - Timeouts bound the wait, not just the call: build, MCP, model and fleet-dispatch waits each have a deadline. [33]
 - Agents act only on the rails: no publishing to Steam/Fab/stores, posting, or purchasing without the user present and approving. [26]
-- Retired model IDs fail or redirect silently: model slugs are pinned in `council.md`; `.claude/scripts/model-slug-check.sh` reports retired slugs anywhere in the repo. [39]
+- Retired model IDs fail or redirect silently: model slugs are pinned in `council.md`; `.claude/scripts/model-slug-check.sh` reports retired slugs anywhere in the repo. [39] The script reports, the gate decides: any council sitting or release check treats `retired_total > 0` as a failure.
 - Block secrets at pre-commit and through push protection, with a rotation runbook for leaks; check SLSA-style build provenance between build and deploy and enforce anti-rollback version checks on the signed update channel. [websec: Secure SDLC; threat-modeling deck ch.3, 8]
 - Shipped UnrealSharp C# assemblies are signed; save files, mods and WebUI input never drive dynamic `Assembly.Load`, reflection or P/Invoke. [threat-modeling deck ch.11; websec: Insecure deserialization]
 
