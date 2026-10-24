@@ -104,6 +104,10 @@ which combinations have been built and which are unverified.
   Interaction and Tales components attach to the GMC pawn.
 - Hot per-move code stays C++. C# (UnrealSharp) and Blueprint may sit on top
   through exposed events; see **ue-csharp-specialist**.
+- Only player-body pawns (`bPlayerBody`) seed `PlayerState` (server-only `SeedFactions`) or retain faction/team snapshots on unpossession; shared vehicles, turrets, NPCs and lobby pawns must not, to prevent client faction hijacking. [NarrativeGMC audit 2026-10-24]
+- The server validates GMC bound input bounds and NaN/Inf, and verifies GMAS ability tags, cooldowns and attribute costs during move replay; never trust client-supplied values. [threat-modeling deck ch.3, 9]
+- Narrative Inventory/Equipment/Interaction/Tales server RPCs enforce ownership, interaction range/line of sight, positive quantities, valid state transitions and atomic check-and-act to prevent co-op duplication races. [websec: Access control, Business logic, Race conditions]
+- C# (UnrealSharp) never instantiates types or calls reflection/P/Invoke from save, mod or WebUI data. [threat-modeling deck ch.11]
 
 ## Forking Policy
 - **Narrative Pro and GMCv2 are Fab products.** Never fork, vendor or

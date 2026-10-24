@@ -128,9 +128,16 @@ director gate's mode check.
 | `/security-audit`, any security-sensitive change | — | Security seats (Cyber Jenny + Gronktayvius Red Team + Regular Jenny, Cedric adjudicates). Cyber Jenny + Regular Jenny count as one Google vote, so security quorum needs Google plus at least one other non-author family (OpenAI via Cedric, or xAI via Gronktayvius Red Team) |
 | `/release-checklist` | — | Full available panel **and** both security seats |
 
+TD-ARCHITECTURE and `/security-audit` sittings require the data-flow diagram + STRIDE table from `security-baseline.md`. [threat-modeling deck ch.1, 9, 10, 12]
+
 Security-sensitive means: auth, crypto, secrets, permissions, input validation,
 parsers, save-file loading, network boundaries, anti-cheat, or any material
-change to attack surface. When unsure, it is security-sensitive.
+change to attack surface. For games, this also includes save-file and config loading,
+mod/UGC loading, network replication and RPC validation, anti-cheat,
+matchmaking/session code, in-engine web UI (WebUI) content, editor MCP servers
+and tooling, packaging/signing/update channel, store and platform credentials
+(Steam, EOS, console); see `.claude/docs/security-baseline.md`.
+When unsure, it is security-sensitive.
 
 ## Combining verdicts
 

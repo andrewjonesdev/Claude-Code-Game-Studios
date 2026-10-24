@@ -83,7 +83,9 @@ On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authori
 - Use `ReplicatedUsing` for properties that need client-side callbacks on change
 - Use `RepNotify` functions named `OnRep_[PropertyName]`
 - Never replicate derived/computed values — compute them client-side from replicated inputs
-- Use `FRepMovement` for character movement, not custom position replication
+- On non-GMC projects: use `FRepMovement` for character movement, not custom position replication
+- No `BlueprintReadWrite` or client-callable C#/Blueprint mutators on authoritative PlayerState, faction, team or inventory properties; server-only mutators are gated by `HasAuthority()`. [NarrativeGMC audit 2026-10-24]
+- Treat `COND_OwnerOnly`, `bOnlyRelevantToOwner` and relevancy culling as confidentiality controls as well as bandwidth controls; hidden loot, distant enemies and private tokens must not reach all clients. [threat-modeling deck ch.5]
 
 ### RPC Design
 - `Server` RPCs: client requests an action, server validates and executes
@@ -99,11 +101,11 @@ On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authori
 
 ### Client Prediction
 - Predict actions client-side for responsiveness, correct on server if wrong
-- Use Unreal's `CharacterMovementComponent` prediction for movement (don't reinvent it)
-- For GAS abilities: use `LocalPredicted` activation policy
+- On non-GMC projects: use Unreal's `CharacterMovementComponent` prediction for movement (don't reinvent it)
+- On non-GMC projects: for GAS abilities: use `LocalPredicted` activation policy
 - Predicted state must be rollbackable — design data structures with rollback in mind
 - Show predicted results immediately, correct smoothly if server disagrees (interpolation, not snapping)
-- Use `FPredictionKey` for gameplay effect prediction
+- On non-GMC projects: use `FPredictionKey` for gameplay effect prediction
 
 ### Net Relevancy and Dormancy
 - Configure `NetRelevancyDistance` per actor class — don't use global defaults blindly
@@ -134,6 +136,7 @@ On the GMCv2 / GMAS stack, character movement is GMC's predicted, server-authori
 - Never trust client-reported positions, damage, or state changes without validation
 - Log suspicious replication patterns for anti-cheat analysis
 - Use checksums for critical replicated data where feasible
+- Custom `NetSerialize` bounds array counts and bit-reader lengths before allocating; use `if (ensure(...))` rather than `check`/`checkf` on network input so malformed packets cannot crash Shipping servers. [NarrativeGMC audit; threat-modeling deck ch.6]
 
 ### Common Replication Anti-Patterns
 - Replicating cosmetic state that could be derived client-side

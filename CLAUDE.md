@@ -21,6 +21,8 @@ Each agent owns a specific domain, enforcing separation of concerns and quality.
 
 ## Council
 
+Security baseline for game work: `.claude/docs/security-baseline.md` (from FLT-281).
+
 Gates also seat other model families (Codex, Gemini, Grok, Muse) per
 `.claude/docs/council.md`. `council.tier` picks `full`, `available` (default) or
 `off`; `bash .claude/scripts/council-preflight.sh` shows who is reachable.
