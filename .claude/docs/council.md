@@ -22,8 +22,8 @@ teammates; the second column is the tool they run on.
 | **Clahadore** | Claude (this session) | Implementer; council seat (advisory-only when Claude wrote the work) | — |
 | **Cedric** | Codex / ChatGPT (`gpt-5.6-sol`, reasoning high) | Chair (synthesis) + seat | `codex exec` |
 | **Regular Jenny** | Gemini 4 Argon High (`gemini-4-argon-high`) | Correctness / design / regression | `agy` |
-| **Cyber Susie** | Meta Muse Spark (`muse-spark-1.3`, effort high), built-in standards-compliance role (OWASP ASVS, Top 10, CWE) + compliance check, "do not use any tool" | Security-compliance seat (FLT-319, replaced Cyber Jenny 2026-10-30) — a general model in a security role, not a vendor Cyber model; same Meta vote as Susie Franny | `council-seat run --seat CyberSusie` |
-| **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), standards-compliance prompt | **Fallback only**, when Muse is down; labelled Cyber Jenny, never relabelled as Susie | `agy` |
+| **Cyber Susie** | Meta Muse Spark (`muse-spark-1.3`, effort high), built-in standards-compliance role (OWASP ASVS, Top 10, CWE) + compliance check, "do not use any tool" | Security-compliance seat (FLT-319, replaced Cyber Jenny 2026-10-30) — a general model in a security role, not a vendor Cyber model; same Meta vote as Susie Franny. Higher false-positive rate than Cyber Jenny in the FLT-319 bake-off (~43 vs ~18 false; 6 vs 5 confirmed): the chair verifies each finding against source | `council-seat run --seat CyberSusie` |
+| **Cyber Jenny** | Gemini 3.8 Flash High (`gemini-3.8-flash-high`), built-in standards-compliance role + compliance check, "do not use any tool" | **Fallback only**, when Muse is down; labelled Cyber Jenny, never relabelled as Susie; not Gemini 3.5 Flash Cyber; same Google vote as Regular Jenny, separate run | `council-seat run --seat CyberJenny` |
 | **Gronktayvius General** | Grok | Correctness, architecture, contracts | `UsageGovernor.exe grok-exec` |
 | **Gronktayvius Red Team** | Grok | Abuse cases, trust boundaries, exploitability | `UsageGovernor.exe grok-exec` |
 | **Susie Franny** | Meta Muse Spark | Regular reviewer; **Red Team stand-in** only when Gronktayvius (Grok) and Jenny (Gemini) are down: abuse cases, trust boundaries, exploitability, prompt-injection paths | `muse exec` read-only (`--disable-write --disable-shell --disable-web-tools`), material inlined in the prompt |
@@ -73,8 +73,8 @@ Built first; the target structure.
 
 - Seats: Cedric, Regular Jenny, Gronktayvius General, Susie Franny (regular seat), Clahadore
   (advisory when Claude authored). Security work seats Gronktayvius Red Team and Cyber Susie
-  (Cyber Jenny, labelled as such, only when Muse is down); when Grok and Gemini are down, it seats Susie Franny as Red Team
-  stand-in instead. Release work follows the same rule.
+  (Cyber Jenny, labelled as such, only when Muse is down); when Grok and Gemini are down, Susie Franny's Red Team
+  stand-in replaces Gronktayvius Red Team only, and Cyber Susie still sits as a separate run. Release work follows the same rule.
 - Chair: Cedric. When Codex authored the work, Clahadore chairs. The author
   never chairs.
 - **Quorum: 3 independent non-author families when Grok and Gemini are up.** In stand-in mode, when both are down and Susie Franny sits as Red Team stand-in, quorum is **2 independent non-author families**, counting her Meta vote (e.g. Cedric + Susie on Claude-authored work).
@@ -89,7 +89,7 @@ Grok when its limits allow. Same roles as `full`, seated from whoever answers.
 1. Run `bash .claude/scripts/council-preflight.sh`. It reports which CLIs are
    installed and which fleet skills exist. It does not decide anything.
 2. Seat every family that is present, in this order: Cedric, Regular Jenny, Susie
-   Franny (regular seat), Gronktayvius General. On security-sensitive or release work also seat Cyber Susie and Gronktayvius Red Team (same families as Susie Franny / Gronktayvius General: they add coverage, not votes). If Muse is down, Cyber Jenny sits as the labelled compliance fallback (Google, same vote as Regular Jenny). Cyber Susie and the Susie Franny Red Team stand-in are two separate runs, never one. Use Susie Franny as Red Team stand-in when Grok and Gemini are down.
+   Franny (regular seat), Gronktayvius General. On security-sensitive or release work also seat Cyber Susie and Gronktayvius Red Team (same families as Susie Franny / Gronktayvius General: they add coverage, not votes). If Muse is down, Cyber Jenny sits as the labelled compliance fallback (Google, same vote as Regular Jenny). Cyber Susie, regular Susie Franny and the Susie Franny Red Team stand-in are separate runs with distinct prompt hashes and artifacts, never one, and together count as one Meta vote. Use Susie Franny as Red Team stand-in when Grok and Gemini are down.
    A seat the usage governor denies counts as absent.
 3. Chair: Cedric if seated and not the author; otherwise the strongest seated
    non-author; if no non-author seat exists,
