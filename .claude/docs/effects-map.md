@@ -117,7 +117,7 @@ The rule for deciding which side a setting belongs on:
 | Setting | Why local override makes sense |
 |---------|-------------------------------|
 | `modes.review_mode` | How much AI review you personally want |
-| `council.tier` | Which model CLIs are installed and logged in differs per machine; a laptop without Regular Jenny / Cyber Jenny (Gemini), Gronktayvius (Grok) or Susie Franny (Muse, Meta) runs `available` while the fleet box runs `full` |
+| `council.tier` | Which model CLIs are installed and logged in differs per machine; a laptop without Regular Jenny (Gemini), Gronktayvius (Grok) or Susie Franny / Cyber Susie (Muse, Meta) runs `available` while the fleet box runs `full` |
 | `modes.automation` | How often the AI prompts you |
 | `modes.automation_always_ask` | Your personal safety categories |
 | `team.size` | Which agents spawn for your reviews (review depth differs, artifacts don't) |
@@ -471,8 +471,8 @@ gate and security-sensitive work.
 
 | Value | Seats | Quorum | Below quorum |
 |---|---|---|---|
-| `full` | Cedric (chair), Regular Jenny, Gronktayvius General, Susie Franny (regular seat), Clahadore; + Cyber Jenny and Gronktayvius Red Team on security/release work, or Susie Franny as Red Team stand-in when Grok and Gemini are down | 3 non-author families when Grok and Gemini are up; when both are down and Susie Franny sits as Red Team stand-in, 2 non-author families total, counting her Meta vote (e.g. Cedric + Susie on Claude-authored work) | Gate fails |
-| `available` | Every family the preflight finds, in order Cedric, Regular Jenny, Susie Franny (regular seat), Gronktayvius General; + Cyber Jenny and Gronktayvius Red Team on security/release work, or Susie Franny as Red Team stand-in when Grok and Gemini are down | 2 non-author families, counting Susie Franny's Meta vote in stand-in mode | `DEGRADED (n/2)` when n = 1 (n = non-author families seated); fails at n = 0; security and release gates fail closed (24 h waiver allowed) |
+| `full` | Cedric (chair), Regular Jenny, Gronktayvius General, Susie Franny (regular seat), Clahadore; + Cyber Susie and Gronktayvius Red Team on security/release work, or Susie Franny as Red Team stand-in when Grok and Gemini are down | 3 non-author families when Grok and Gemini are up; when both are down and Susie Franny sits as Red Team stand-in, 2 non-author families total, counting her Meta vote (e.g. Cedric + Susie on Claude-authored work) | Gate fails |
+| `available` | Every family the preflight finds, in order Cedric, Regular Jenny, Susie Franny (regular seat), Gronktayvius General; + Cyber Susie and Gronktayvius Red Team on security/release work, or Susie Franny as Red Team stand-in when Grok and Gemini are down | 2 non-author families, counting Susie Franny's Meta vote in stand-in mode | `DEGRADED (n/2)` when n = 1 (n = non-author families seated); fails at n = 0; security and release gates fail closed (24 h waiver allowed) |
 | `off` | None — directors only (upstream behaviour) | — | — |
 
 Susie Franny (Muse, Meta family) is a regular reviewer and the Meta family vote in every sitting when Grok and Gemini are up. Only when both are down under this sitting's provider-error/preflight-absence evidence rule in `council.md` does she become the Red Team stand-in: `council-seat run --seat SusieFranny --red-team --red-team-reason "<each down seat and cited provider error/preflight absence>"`. Label the sitting record "Susie Franny (Red Team stand-in)" with the reason; her verdict remains Susie Franny (Meta), never Gronktayvius (xAI) or Jenny, and vice versa. Run her read-only with `--disable-write --disable-shell --disable-web-tools`, material inlined in the prompt.
